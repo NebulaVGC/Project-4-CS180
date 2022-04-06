@@ -1,12 +1,29 @@
-import java.util.Calendar;
-import java.util.Date;
+import java.io.*;
 import java.text.SimpleDateFormat;
-public class Victor {
-    private static char[][] map;
-    private static int currentRow;
-    private static int currentColumn;
-    public static void main(String[] args) {
-        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
-        System.out.println(timeStamp);
+import java.util.Calendar;
+import java.util.Scanner;
+
+public class Student {
+    public void runQuiz(String filename) throws IOException {
+            Scanner scanner = new Scanner(System.in);
+            BufferedReader br = new BufferedReader(new FileReader(filename));
+            System.out.println(br.readLine());
+            String name = scanner.nextLine();
+            File f = new File(name + "_" + filename);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+            String nextLine;
+            String finalString = name;
+            while ((nextLine = br.readLine()) != null) {
+                System.out.println(nextLine + "\n" + br.readLine() + "\n" +
+                        br.readLine() + "\n" + br.readLine() + "\n" + br.readLine());
+                String answer = scanner.nextLine();
+                finalString = finalString + "\n" + answer;
+                br.readLine();
+            }
+            String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
+            finalString = finalString + "\n" + timeStamp;
+            bw.write(finalString);
+            bw.close();
+            br.close();
     }
 }
