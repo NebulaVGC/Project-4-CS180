@@ -121,7 +121,7 @@ public class Student {
             String teacher = null;
             while (n == 0) {
                 BufferedReader br = new BufferedReader(new FileReader("TeacherAccount.txt"));
-                System.out.println("What is the name of your teacher?");
+                System.out.println("What is the username of your teacher?");
                 teacher = scan.nextLine();
                 String newLine = "";
                 boolean validTeacher = false;
