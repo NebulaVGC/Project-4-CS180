@@ -12,6 +12,12 @@ public class Teacher {
         System.out.println("Enter the name of the new course");
         String courseName = scan.nextLine();
         
+        try {
+            PrintWriter pw = new PrintWriter(new FileOutputStream(courseName));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     public void createQuiz() {
