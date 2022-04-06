@@ -44,4 +44,16 @@ public class Student {
         //gives us quiz name
         //run quiz (quiz name, username)
     }
+     public int showCourses(int a){
+        int courseSelector = 0;
+        do{
+            System.out.println("Please select which course you would like to enter");
+            courseSelector = scan.nextInt();
+            scan.nextLine();
+            if(courseSelector <= 0 || courseSelector > a){
+                System.out.println("Please enter a valid course id!");
+            }
+        } while(courseSelector <= 0 || courseSelector > a);
+        return courseSelector;
+    }
 }
