@@ -37,6 +37,37 @@ public class Student {
     }
     public static void main(String[] args) {
         //show courses
+        public static void main(String[] args) {
+        //takes place after login
+        Scanner scan = new Scanner(System.in);
+        try{
+            Student stud = new Student;
+            File course = new File("courses.txt");
+            FileReader frcourse = new FileReader(course);
+            BufferedReader bfr = new BufferedReader(frcourse);
+            ArrayList<String> courseList = new ArrayList<>();
+            String line = bfr.readLine();
+            int counter = 0;
+            while(line != null){
+                counter++;
+                System.out.println(counter + ". " + line);
+                line = bfr.readLine();
+            }
+            int courseSelector = 0;
+            do{
+                System.out.println("Please select which course you would like to enter");
+                courseSelector = scan.nextInt();
+                scan.nextLine();
+                if(courseSelector <= 0 || courseSelector > counter){
+                    System.out.println("Please enter a valid course id!");
+                }
+            } while(courseSelector <= 0 || courseSelector > counter);
+            
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
         //pick course
         //directs us to course file
         //show quizzes
