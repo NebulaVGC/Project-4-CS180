@@ -1,95 +1,132 @@
 import java.awt.print.PrinterAbortException;
 import java.io.*;
+import java.nio.file.ProviderNotFoundException;
 import java.util.Scanner;
 
 public class Teacher {
     private String userName;
+    private String[] courses;
+    private Scanner scan = new Scanner(System.in);
 
-    public Teacher(String userName) {
+    public Teacher(String userName, String[] courses) {
         this.userName = userName;
+        this.courses = courses;
     }
+
     public void createCourse(){
         System.out.println("Enter the name of the new course");
         String courseName = scan.nextLine();
-        
+
         try {
             PrintWriter pw = new PrintWriter(new FileOutputStream(courseName));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     public void createQuiz() {
         String course;
         String quizName;
+        int contains = 0;
+        PrintWriter pw = null;
 
-        Scanner scan = new Scanner(System.in);
+
         System.out.println("What is the course this quiz is for?");
         course = scan.nextLine();
         //Check if this course exists
+        for(int i = 0; i < courses.length; i++) {
+            if(course.equals(courses[i])){
+                contains = 1;
+            }
+        }
+        if(contains == 0) {
+            do{
+                System.out.println("This course does not exist. Please enter another course");
+                course = scan.nextLine();
+                for(int i = 0; i < courses.length; i++) {
+                    if(course.equals(courses[i])){
+                        contains = 1;
+                    }
+                }
+            } while(contains == 0);
+        }
         System.out.println("What is the name of the quiz?");
         quizName = scan.nextLine();
         try {
-            PrintWriter pw = new PrintWriter(new FileOutputStream(quizName));
+            File f = new File(quizName);
+            pw = new PrintWriter(new FileOutputStream(f));
+            f.createNewFile();
+
         } catch (FileNotFoundException e) {
+            //Input Validation
+        } catch (IOException e) {
             e.printStackTrace();
         }
         int count = 1;
         int choice = 1;
         int question;
 
-        System.out.print("Do you want to add a question?");
-        System.out.print("1.Yes");
-        System.out.print("2.No");
-        choice = scan.nextLine();
+        System.out.println("Do you want to add a question?");
+        System.out.println("1.Yes");
+        System.out.println("2.No");
+        choice = scan.nextInt();
         while (choice == 1){
-            
-            System.out.print("Please type question " + count);
-            String givenQuestion = scan.nextLine();
-            System.out.print("Please type answer option A");
-            String answerA = scan.nextLine();
-            System.out.print("Please type answer option B");
-            String answerB = scan.nextLine();
-            System.out.print("Please type answer option C");
-            String answerC = scan.nextLine();
-            System.out.print("Please type answer option D");
-            String answerD = scan.nextLine();
-            System.out.print("Please enter the correct answer for question " + count);
-            String correctAnswer = scan.nextLine();
+
+            System.out.println("Please type question " + count);
+            scan.nextLine();
+            String givenQuestion = scan.next();
+            System.out.println("Please type answer option A");
+            String answerA = scan.next();
+            System.out.println("Please type answer option B");
+            scan.nextLine();
+            String answerB = scan.next();
+            System.out.println("Please type answer option C");
+            String answerC = scan.next();
+            System.out.println("Please type answer option D");
+            String answerD = scan.next();
+            System.out.println("Please enter the correct answer for question " + count);
+            String correctAnswer = scan.next();
             count = count + 1;
-            
-            System.out.print("Do you want to add a question?");
-            System.out.print("1.Yes");
-            System.out.print("2.No");
-            choice = scan.nextLine();
+
+            pw.println(givenQuestion);
+            pw.println(answerA);
+            pw.println(answerB);
+            pw.println(answerC);
+            pw.println(answerD);
+            pw.println(correctAnswer);
+            System.out.println("Do you want to add a question?");
+            System.out.println("1.Yes");
+            System.out.println("2.No");
+            choice = scan.nextInt();
+
 
         }
 
         System.out.print("The quiz is completed");
 
-
+        pw.close();
     }
 
     public void editQuiz() {
-    //ask for the file name of the quiz that is going to be edited. Print that quiz to an arraylist. Ask for the quesiton that is going to be edited
-    // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
-    // print the new arraylist to the file and save it
-
+        //ask for the file name of the quiz that is going to be edited. Print that quiz to an arraylist. Ask for the quesiton that is going to be edited
+        // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
+        // print the new arraylist to the file and save it
     }
 
     public void deleteQuiz() {
         Scanner scan = new Scanner(System.in);
         System.out.print("Enter the name of the quiz you want to delete.");
         String quizName = scan.nextLine();
-        File file = new File(quizname);
- 
+        File file = new File(quizName);
+
         if (file.delete()) {
             System.out.println("File deleted successfully");
         }
         else {
             System.out.println("Failed to delete the file");
         }
+
     }
 
     public void viewStudentSubmission() {
@@ -98,5 +135,11 @@ public class Teacher {
 
     public void gradeQuiz() {
 
+    }
+
+    public static void main(String[] args) {
+        String[] s = {"Physics"};
+        Teacher teacher = new Teacher("Teacher 1",s);
+        teacher.createQuiz();
     }
 }
