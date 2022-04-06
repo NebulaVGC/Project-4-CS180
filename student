@@ -4,6 +4,12 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Student {
+    private String userName;
+    
+    public Student(String userName) {
+        this.userName = userName;
+    }
+    
     public void runQuiz(String filename, String userName) throws IOException {
         Scanner scanner = new Scanner(System.in);
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -30,14 +36,12 @@ public class Student {
         br.close();
     }
     public static void main(String[] args) {
-        System.out.println("input filename");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        Student student = new Student();
-        try {
-            student.runQuiz(input, "matthew");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //show courses
+        //pick course
+        //directs us to course file
+        //show quizzes
+        //pick a quiz
+        //gives us quiz name
+        //run quiz (quiz name, username)
     }
 }
