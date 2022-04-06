@@ -24,7 +24,7 @@ public class Teacher {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-                int count = 1;
+        int count = 1;
         int choice = 1;
         int question;
 
