@@ -1,1 +1,27 @@
-Teacher Work 
+public class Teacher {
+    private String userName;
+
+    public Teacher(String userName) {
+        this.userName = userName;
+    }
+
+    public void createQuiz() {
+
+    }
+
+    public void editQuiz() {
+
+    }
+
+    public void deleteQuiz() {
+
+    }
+
+    public void viewStudentSubmission() {
+
+    }
+
+    public void gradeQuiz() {
+        
+    }
+}
