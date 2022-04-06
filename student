@@ -4,14 +4,18 @@ import java.util.Calendar;
 import java.util.Scanner;
 
 public class Student {
+    Scanner scan = new Scanner(System.in);
     private String userName;
-    
+
     public Student(String userName) {
         this.userName = userName;
     }
     
+    public Student() {
+        
+    }
+
     public void runQuiz(String filename, String userName) throws IOException {
-        Scanner scanner = new Scanner(System.in);
         BufferedReader br = new BufferedReader(new FileReader(filename));
         File f = new File(userName + "_" + filename);
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
@@ -20,11 +24,11 @@ public class Student {
         while ((nextLine = br.readLine()) != null) {
             System.out.println(nextLine + "\n" + br.readLine() + "\n" +
                     br.readLine() + "\n" + br.readLine() + "\n" + br.readLine());
-            String answer = scanner.nextLine().toUpperCase();
+            String answer = scan.nextLine().toUpperCase();
             while (!answer.equals("A") && !answer.equals("B") && !answer.equals("C") && !answer.equals("D")) {
                 System.out.println("INVALID ANSWER OPTION");
                 System.out.println("Please try again:");
-                answer = scanner.nextLine().toUpperCase();
+                answer = scan.nextLine().toUpperCase();
             }
             finalString = finalString + "\n" + answer;
             br.readLine();
@@ -35,56 +39,61 @@ public class Student {
         bw.close();
         br.close();
     }
+    
+    public String pickOption(String filename) {
+        String courseName = null;
+        try {
+            File course = new File(filename);
+            FileReader frcourse = new FileReader(course);
+            BufferedReader bfrCourse = new BufferedReader(frcourse);
+            String line = bfrCourse.readLine();
+            int counter = 0;
+            while (line != null) {
+                counter++;
+                System.out.println(counter + ". " + line);
+                line = bfrCourse.readLine();
+            }
+            int courseSelector = 0;
+            do {
+                System.out.println("Please select which quiz you would like to take?");
+                courseSelector = scan.nextInt();
+                scan.nextLine();
+                if (courseSelector <= 0 || courseSelector > counter) {
+                    System.out.println("Please enter a valid quiz id!");
+                }
+            } while (courseSelector <= 0 || courseSelector > counter);
+
+            courseName = "";
+            BufferedReader bfr = new BufferedReader(new FileReader(filename));
+            for (int i = 0; i < courseSelector; i++) {
+                courseName = bfr.readLine();
+            }
+            bfr.close();
+            bfrCourse.close();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        return courseName;
+    }
+    
+    
     public static void main(String[] args) {
-        //show courses
-        public static void main(String[] args) {
         //takes place after login
         Scanner scan = new Scanner(System.in);
         try{
-            Student stud = new Student;
-            File course = new File("courses.txt");
-            FileReader frcourse = new FileReader(course);
-            BufferedReader bfr = new BufferedReader(frcourse);
-            ArrayList<String> courseList = new ArrayList<>();
-            String line = bfr.readLine();
-            int counter = 0;
-            while(line != null){
-                counter++;
-                System.out.println(counter + ". " + line);
-                line = bfr.readLine();
-            }
-            int courseSelector = 0;
-            do{
-                System.out.println("Please select which course you would like to enter");
-                courseSelector = scan.nextInt();
-                scan.nextLine();
-                if(courseSelector <= 0 || courseSelector > counter){
-                    System.out.println("Please enter a valid course id!");
-                }
-            } while(courseSelector <= 0 || courseSelector > counter);
+            Student student = new Student();
+            student.pickOption(student.pickOption("Course"));
             
+
         } catch(Exception e){
             e.printStackTrace();
         }
 
-    }
         //pick course
         //directs us to course file
         //show quizzes
         //pick a quiz
         //gives us quiz name
         //run quiz (quiz name, username)
-    }
-     public int showCourses(int a){
-        int courseSelector = 0;
-        do{
-            System.out.println("Please select which course you would like to enter");
-            courseSelector = scan.nextInt();
-            scan.nextLine();
-            if(courseSelector <= 0 || courseSelector > a){
-                System.out.println("Please enter a valid course id!");
-            }
-        } while(courseSelector <= 0 || courseSelector > a);
-        return courseSelector;
     }
 }
