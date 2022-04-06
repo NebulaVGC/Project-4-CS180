@@ -6,18 +6,16 @@ import java.util.Scanner;
 public class Student {
     Scanner scan = new Scanner(System.in);
     private String userName;
+    private String teacherUserName;
 
-    public Student(String userName) {
+    public Student(String userName, String teacherUserName) {
         this.userName = userName;
-    }
-    
-    public Student() {
-        
+        this.teacherUserName = teacherUserName;
     }
 
-    public void runQuiz(String filename, String userName) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(filename));
-        File f = new File(userName + "_" + filename);
+    public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(quizName));
+        File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName);
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         String nextLine;
         String finalString = userName;
@@ -33,14 +31,51 @@ public class Student {
             finalString = finalString + "\n" + answer;
             br.readLine();
         }
+        System.out.println("Thanks for taking the quiz!");
         String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
         finalString = finalString + "\n" + timeStamp;
         bw.write(finalString);
         bw.close();
         br.close();
     }
-    
-    public String pickOption(String filename) {
+
+    public String pickCourse(String filename) {
+        String courseName = null;
+        try {
+            File course = new File(filename);
+            FileReader frcourse = new FileReader(course);
+            BufferedReader bfrCourse = new BufferedReader(frcourse);
+            String line = bfrCourse.readLine();
+            int counter = 0;
+            while (line != null) {
+                counter++;
+                System.out.println(counter + ". " + line);
+                line = bfrCourse.readLine();
+            }
+            int courseSelector = 0;
+            do {
+                System.out.println("Please select which course you would like to take?");
+                courseSelector = scan.nextInt();
+                scan.nextLine();
+                if (courseSelector <= 0 || courseSelector > counter) {
+                    System.out.println("Please enter a valid course id!");
+                }
+            } while (courseSelector <= 0 || courseSelector > counter);
+
+            courseName = "";
+            BufferedReader bfr = new BufferedReader(new FileReader(filename));
+            for (int i = 0; i < courseSelector; i++) {
+                courseName = bfr.readLine();
+            }
+            bfr.close();
+            bfrCourse.close();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        return courseName;
+    }
+
+    public String pickQuiz(String filename) {
         String courseName = null;
         try {
             File course = new File(filename);
@@ -75,25 +110,49 @@ public class Student {
         }
         return courseName;
     }
-    
-    
+
+
     public static void main(String[] args) {
         //takes place after login
         Scanner scan = new Scanner(System.in);
         try{
-            Student student = new Student();
-            student.pickOption(student.pickOption("Course"));
-            
+            Student student = new Student("username", "stacey");
+            int n  = 0;
+            String teacher = null;
+            while (n == 0) {
+                BufferedReader br = new BufferedReader(new FileReader("TeacherAccount.txt"));
+                System.out.println("What is the name of your teacher?");
+                teacher = scan.nextLine();
+                String newLine = "";
+                boolean validTeacher = false;
+                while ((newLine = br.readLine()) != null) {
+                    if (newLine.equals(teacher)) {
+                        validTeacher = true;
+                        break;
+                    }
+                }
+                if (validTeacher == false) {
+                    System.out.println("Teacher does not exist");
+                } else {
+                    n++;
+                }
+            }
+            String course = student.pickCourse(teacher + "_Courses");
+            String quiz = student.pickQuiz(teacher + "_" + course);
+            if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
+                student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
+            } else {
+                System.out.println("Quiz already taken");
+                //print (1. view quiz grade    2. exit back to courses)
+                //if option 1 show grade
+                //if option 2 loop to courses
+            }
+
+
 
         } catch(Exception e){
             e.printStackTrace();
         }
 
-        //pick course
-        //directs us to course file
-        //show quizzes
-        //pick a quiz
-        //gives us quiz name
-        //run quiz (quiz name, username)
     }
 }
