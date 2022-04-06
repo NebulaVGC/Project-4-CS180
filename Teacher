@@ -99,8 +99,4 @@ public class Teacher {
     public void gradeQuiz() {
 
     }
-
-    public void addCourse(){
-
-    }
 }
