@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Run {
-    private static int currentRow;
     final static String welcomePrompt = "Please choose a login type\n1. Teacher\n2. Student";
     final static String Error = "There was an error!";
     final static String accountPrompt = "Do you want to make a new account or login with existing account?\n1. Make a new account\n2. Login with existing account";
@@ -14,261 +13,296 @@ public class Run {
     final static String WrongPassword = "That's the wrong password!";
     final static String UsernameExist = "This username already existed!";
     final static String UsernameDoesNotExist = "This username does not existed!";
-    final static String ContinueWithDifferentUser = "Do you want to continue with a different username\n1. Yes\n2. No";
-
-    private static int UsernameStatus = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        boolean keepGoing = true;
-        while (keepGoing == true) {
-            UsernameStatus = 0;
-            int welcome = 0;
-            int account = 0;
-            int[] LoginType = new int[1];
-            int[] accountChoice = new int[1];
-            int[] login = new int[1];
-            login[0] = 0;
+        int usernameStatus;
+        int welcome = 0;
+        int account;
+        int[] LoginType = new int[1];
+        int[] accountChoice = new int[1];
+        int[] login = new int[1];
 
-            String Username;
-            while (welcome == 0) {
-                System.out.println(welcomePrompt);
-                LoginType[0] = scanner.nextInt();
-                scanner.nextLine();
-                if (LoginType[0] != 1 && LoginType[0] != 2) {
-                    System.out.println(Error);
-                } else {
-                    welcome++;
-                }
+        checkFile();
+        String Username;
+        while (welcome == 0) {
+            System.out.println(welcomePrompt);
+            LoginType[0] = scanner.nextInt();
+            scanner.nextLine();
+            if (LoginType[0] != 1 && LoginType[0] != 2) {
+                System.out.println(Error);
+            } else {
+                welcome++;
             }
-            if (LoginType[0] == 1) {
-                while (login[0] == 0) {
-                    account = 0;
-                    UsernameStatus = 0;
-                    while (account == 0) {
-                        System.out.println(accountPrompt);
-                        accountChoice[0] = scanner.nextInt();
-                        scanner.nextLine();
-                        if (accountChoice[0] != 1 && accountChoice[0] != 2) {
-                            System.out.println(Error);
-                        } else {
-                            account++;
-                        }
+        }
+        if (LoginType[0] == 1) {
+            while (login[0] == 0) {
+                account = 0;
+                usernameStatus = 0;
+                while (account == 0) {
+                    System.out.println(accountPrompt);
+                    accountChoice[0] = scanner.nextInt();
+                    scanner.nextLine();
+                    if (accountChoice[0] != 1 && accountChoice[0] != 2) {
+                        System.out.println(Error);
+                    } else {
+                        account++;
                     }
-                    if (accountChoice[0] == 1) {
-                        System.out.println(MakeUsername);
-                        while (UsernameStatus == 0) {
-                            Username = scanner.nextLine();
-                            try {
-                                File f = new File("TeacherAccount.txt");
-                                FileReader fr = new FileReader(f);
-                                BufferedReader bfr = new BufferedReader(fr);
-                                String line = bfr.readLine();
-                                UsernameStatus = 1;
+                }
+                if (accountChoice[0] == 1) {
+                    System.out.println(MakeUsername);
+                    while (usernameStatus == 0) {
+                        Username = scanner.nextLine();
+                        try {
+                            File f = new File("TeacherAccount.txt");
+                            FileReader fr = new FileReader(f);
+                            BufferedReader bfr = new BufferedReader(fr);
+                            String line = bfr.readLine();
+                            usernameStatus = 1;
 
-                                while (line != null) {
-                                    if (Username.equals(line)) {
-                                        System.out.println(UsernameExist);
-                                        UsernameStatus = 2;
-                                        login[0] = 0;
-                                        break;
-                                    }
-                                    line = bfr.readLine();
-                                }
-                                bfr.close();
-                                if (UsernameStatus == 1) {
-                                    File teacherAccount = new File("TeacherAccount.txt");
-                                    FileOutputStream fos = new FileOutputStream(teacherAccount, true);
-                                    PrintWriter pw = new PrintWriter(fos);
-                                    pw.println(Username);
-                                    System.out.println(MakePassword);
-                                    String password = scanner.nextLine();
-                                    File teacherPassword = new File("TeacherPassword.txt");
-                                    FileOutputStream fos2 = new FileOutputStream(teacherPassword, true);
-                                    PrintWriter pw2 = new PrintWriter(fos);
-                                    pw2.println(password);
-                                    pw2.close();
-                                    pw.close();
-                                    login[0] = 1;
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    } else if (accountChoice[0] == 2) {
-                        System.out.println(LoginUsername);
-                        while (UsernameStatus == 0) {
-                            try {
-                                Username = scanner.nextLine();
-                                File f = new File("TeacherAccount.txt");
-                                FileReader fr = new FileReader(f);
-                                BufferedReader bfr = new BufferedReader(fr);
-                                String line = bfr.readLine();
-                                UsernameStatus = 1;
-                                int[] counter = new int[1];
-                                ArrayList<String> accountList = new ArrayList<>();
-                                ArrayList<String> passwordList = new ArrayList<>();
-
-                                while (line != null) {
-                                    accountList.add(line);
-                                    if (Username.equals(line)) {
-                                        counter[0]++;
-                                    }
-                                    line = bfr.readLine();
-                                }
-                                bfr.close();
-                                if (counter[0] == 0) {
-                                    System.out.println(UsernameDoesNotExist);
-                                    UsernameStatus = 2;
+                            while (line != null) {
+                                if (Username.equals(line)) {
+                                    System.out.println(UsernameExist);
+                                    usernameStatus = 2;
                                     login[0] = 0;
                                     break;
-                                } else {
-                                    System.out.println(LoginPassword);
-                                    String password = scanner.nextLine();
-                                    File f2 = new File("TeacherPassword.txt");
-                                    FileReader fr2 = new FileReader(f2);
-                                    BufferedReader bfr2 = new BufferedReader(fr2);
-                                    String line2 = bfr2.readLine();
-
-                                    while (line2 != null) {
-                                        passwordList.add(line2);
-                                        line2 = bfr2.readLine();
-                                    }
-                                    bfr2.close();
-                                    if (accountList.indexOf(Username) == accountList.indexOf(password)) {
-                                        //run teacher
-                                    } else {
-                                        System.out.println(WrongPassword);
-                                        UsernameStatus = 2;
-                                        login[0] = 0;
-                                        break;
-                                    }
-                                    login[0] = 1;
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                line = bfr.readLine();
                             }
+                            bfr.close();
+                            if (usernameStatus == 1) {
+                                File teacherAccount = new File("TeacherAccount.txt");
+                                FileOutputStream fos = new FileOutputStream(teacherAccount, true);
+                                PrintWriter pw = new PrintWriter(fos);
+                                pw.println(Username);
+                                System.out.println(MakePassword);
+                                String password = scanner.nextLine();
+                                File teacherPassword = new File("TeacherPassword.txt");
+                                FileOutputStream fos2 = new FileOutputStream(teacherPassword, true);
+                                PrintWriter pw2 = new PrintWriter(fos2);
+                                pw2.println(password);
+                                pw2.close();
+                                pw.close();
+                                login[0] = 1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
-                }
-            } else if (LoginType[0] == 2) {
-                while (login[0] == 0) {
-                    account = 0;
-                    UsernameStatus = 0;
-                    while (account == 0) {
-                        account = 0;
-                        System.out.println(accountPrompt);
-                        accountChoice[0] = scanner.nextInt();
-                        scanner.nextLine();
-                        if (accountChoice[0] != 1 && accountChoice[0] != 2) {
-                            System.out.println(Error);
-                        } else {
-                            account++;
-                        }
-                    }
-                    if (accountChoice[0] == 1) {
-                        System.out.println(MakeUsername);
-                        while (UsernameStatus == 0) {
+                } else {
+                    System.out.println(LoginUsername);
+                    while (usernameStatus == 0) {
+                        try {
                             Username = scanner.nextLine();
-                            try {
-                                File f = new File("StudentAccount.txt");
-                                FileReader fr = new FileReader(f);
-                                BufferedReader bfr = new BufferedReader(fr);
-                                String line = bfr.readLine();
-                                UsernameStatus = 1;
+                            File f = new File("TeacherAccount.txt");
+                            FileReader fr = new FileReader(f);
+                            BufferedReader bfr = new BufferedReader(fr);
+                            String line = bfr.readLine();
+                            usernameStatus = 1;
+                            int[] counter = new int[1];
+                            ArrayList<String> accountList = new ArrayList<>();
+                            ArrayList<String> passwordList = new ArrayList<>();
 
-                                while (line != null) {
-                                    if (Username.equals(line)) {
-                                        System.out.println(UsernameExist);
-                                        UsernameStatus = 2;
-                                        login[0] = 0;
-                                        break;
-                                    }
-                                    line = bfr.readLine();
+                            while (line != null) {
+                                accountList.add(line);
+                                if (Username.equals(line)) {
+                                    counter[0]++;
                                 }
-                                bfr.close();
-                                if (UsernameStatus == 1) {
-                                    File teacherAccount = new File("StudentAccount.txt");
-                                    FileOutputStream fos = new FileOutputStream(teacherAccount, true);
-                                    PrintWriter pw = new PrintWriter(fos);
-                                    pw.println(Username);
-                                    System.out.println(MakePassword);
-                                    String password = scanner.nextLine();
-                                    File teacherPassword = new File("StudentPassword.txt");
-                                    FileOutputStream fos2 = new FileOutputStream(teacherPassword, true);
-                                    PrintWriter pw2 = new PrintWriter(fos);
-                                    pw2.println(password);
-                                    pw2.close();
-                                    pw.close();
-                                    login[0] = 1;
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                line = bfr.readLine();
                             }
-                        }
-                    } else if (accountChoice[0] == 2) {
-                        System.out.println(LoginUsername);
-                        while (UsernameStatus == 0) {
-                            try {
-                                Username = scanner.nextLine();
-                                File f = new File("StudentAccount.txt");
-                                FileReader fr = new FileReader(f);
-                                BufferedReader bfr = new BufferedReader(fr);
-                                String line = bfr.readLine();
-                                UsernameStatus = 1;
-                                int[] counter = new int[1];
-                                ArrayList<String> accountList = new ArrayList<>();
-                                ArrayList<String> passwordList = new ArrayList<>();
+                            bfr.close();
+                            if (counter[0] == 0) {
+                                System.out.println(UsernameDoesNotExist);
+                                usernameStatus = 2;
+                                login[0] = 0;
+                                break;
+                            } else {
+                                System.out.println(LoginPassword);
+                                String password = scanner.nextLine();
+                                File f2 = new File("TeacherPassword.txt");
+                                FileReader fr2 = new FileReader(f2);
+                                BufferedReader bfr2 = new BufferedReader(fr2);
+                                String line2 = bfr2.readLine();
 
-                                while (line != null) {
-                                    if (Username.equals(line)) {
-                                        counter[0]++;
-                                    }
-                                    line = bfr.readLine();
+                                while (line2 != null) {
+                                    passwordList.add(line2);
+                                    line2 = bfr2.readLine();
                                 }
-                                bfr.close();
-                                if (counter[0] == 0) {
-                                    System.out.println(UsernameDoesNotExist);
-                                    UsernameStatus = 2;
-                                    login[0] = 0;
+                                bfr2.close();
+                                if (accountList.indexOf(Username) == accountList.indexOf(password)) {
+                                    //run teacher
                                 } else {
-                                        System.out.println(LoginPassword);
-                                        String password = scanner.nextLine();
-                                        File f2 = new File("StudentPassword.txt");
-                                        FileReader fr2 = new FileReader(f2);
-                                        BufferedReader bfr2 = new BufferedReader(fr2);
-                                        String line2 = bfr2.readLine();
-
-                                        while (line2 != null) {
-                                            passwordList.add(line2);
-                                            line2 = bfr2.readLine();
-                                        }
-                                        bfr2.close();
-
-                                        if (accountList.indexOf(Username) == accountList.indexOf(password)) {
-                                            //run student
-                                        } else {
-                                            System.out.println(WrongPassword);
-                                            UsernameStatus = 2;
-                                            login[0] = 0;
-                                            break;
-                                        }
-                                    //print StudentUserName
-                                    login[0] = 1;
+                                    System.out.println(WrongPassword);
+                                    usernameStatus = 2;
+                                    login[0] = 0;
+                                    break;
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                                login[0] = 1;
                             }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 }
             }
-            System.out.println(ContinueWithDifferentUser);
-            int anotherRound = scanner.nextInt();
-            scanner.nextLine();
-            if (anotherRound == 2) {
-                return;
+        } else if (LoginType[0] == 2) {
+            while (login[0] == 0) {
+                account = 0;
+                usernameStatus = 0;
+                while (account == 0) {
+                    account = 0;
+                    System.out.println(accountPrompt);
+                    accountChoice[0] = scanner.nextInt();
+                    scanner.nextLine();
+                    if (accountChoice[0] != 1 && accountChoice[0] != 2) {
+                        System.out.println(Error);
+                    } else {
+                        account++;
+                    }
+                }
+                if (accountChoice[0] == 1) {
+                    System.out.println(MakeUsername);
+                    while (usernameStatus == 0) {
+                        Username = scanner.nextLine();
+                        try {
+                            File f = new File("StudentAccount.txt");
+                            FileReader fr = new FileReader(f);
+                            BufferedReader bfr = new BufferedReader(fr);
+                            String line = bfr.readLine();
+                            usernameStatus = 1;
+
+                            while (line != null) {
+                                if (Username.equals(line)) {
+                                    System.out.println(UsernameExist);
+                                    usernameStatus = 2;
+                                    login[0] = 0;
+                                    break;
+                                }
+                                line = bfr.readLine();
+                            }
+                            bfr.close();
+                            if (usernameStatus == 1) {
+                                File teacherAccount = new File("StudentAccount.txt");
+                                FileOutputStream fos = new FileOutputStream(teacherAccount, true);
+                                PrintWriter pw = new PrintWriter(fos);
+                                pw.println(Username);
+                                System.out.println(MakePassword);
+                                String password = scanner.nextLine();
+                                File teacherPassword = new File("StudentPassword.txt");
+                                FileOutputStream fos2 = new FileOutputStream(teacherPassword, true);
+                                PrintWriter pw2 = new PrintWriter(fos2);
+                                pw2.println(password);
+                                pw2.close();
+                                pw.close();
+                                login[0] = 1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (accountChoice[0] == 2) {
+                    System.out.println(LoginUsername);
+                    while (usernameStatus == 0) {
+                        try {
+                            Username = scanner.nextLine();
+                            File f = new File("StudentAccount.txt");
+                            FileReader fr = new FileReader(f);
+                            BufferedReader bfr = new BufferedReader(fr);
+                            String line = bfr.readLine();
+                            usernameStatus = 1;
+                            int[] counter = new int[1];
+                            ArrayList<String> accountList = new ArrayList<>();
+                            ArrayList<String> passwordList = new ArrayList<>();
+
+                            while (line != null) {
+                                if (Username.equals(line)) {
+                                    counter[0]++;
+                                }
+                                line = bfr.readLine();
+                            }
+                            bfr.close();
+                            if (counter[0] == 0) {
+                                System.out.println(UsernameDoesNotExist);
+                                usernameStatus = 2;
+                                login[0] = 0;
+                            } else {
+                                System.out.println(LoginPassword);
+                                String password = scanner.nextLine();
+                                File f2 = new File("StudentPassword.txt");
+                                FileReader fr2 = new FileReader(f2);
+                                BufferedReader bfr2 = new BufferedReader(fr2);
+                                String line2 = bfr2.readLine();
+
+                                while (line2 != null) {
+                                    passwordList.add(line2);
+                                    line2 = bfr2.readLine();
+                                }
+                                bfr2.close();
+
+                                if (accountList.indexOf(Username) == accountList.indexOf(password)) {
+                                    //run student
+                                } else {
+                                    System.out.println(WrongPassword);
+                                    usernameStatus = 2;
+                                    login[0] = 0;
+                                    break;
+                                }
+                                //print StudentUserName
+                                login[0] = 1;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    private static void checkFile() {
+        File tAccount = new File("TeacherAccount.txt");
+        try {
+            if (tAccount.exists()) {
+
+            } else {
+                tAccount.createNewFile();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        File tPassword = new File("TeacherPassword.txt");
+        try {
+            if (tPassword.exists()) {
+
+            } else {
+                tPassword.createNewFile();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        File sAccount = new File("StudentAccount.txt");
+        try {
+            if (sAccount.exists()) {
+
+            } else {
+                sAccount.createNewFile();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        File sPassword = new File("StudentPassword.txt");
+        try {
+            if (sPassword.exists()) {
+
+            } else {
+                sPassword.createNewFile();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
