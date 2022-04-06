@@ -24,6 +24,38 @@ public class Teacher {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+                int count = 1;
+        int choice = 1;
+        int question;
+
+        System.out.print("Do you want to add a question?");
+        System.out.print("1.Yes");
+        System.out.print("2.No");
+        choice = scan.nextLine();
+        while (choice == 1){
+            
+            System.out.print("Please type question " + count);
+            String givenQuestion = scan.nextLine();
+            System.out.print("Please type answer option A");
+            String answerA = scan.nextLine();
+            System.out.print("Please type answer option B");
+            String answerB = scan.nextLine();
+            System.out.print("Please type answer option C");
+            String answerC = scan.nextLine();
+            System.out.print("Please type answer option D");
+            String answerD = scan.nextLine();
+            System.out.print("Please enter the correct answer for question " + count);
+            String correctAnswer = scan.nextLine();
+            count = count + 1;
+            
+            System.out.print("Do you want to add a question?");
+            System.out.print("1.Yes");
+            System.out.print("2.No");
+            choice = scan.nextLine();
+
+        }
+
+        System.out.print("The quiz is completed");
 
 
     }
