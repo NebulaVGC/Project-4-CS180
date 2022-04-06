@@ -72,6 +72,9 @@ public class Teacher {
     }
 
     public void editQuiz() {
+    //ask for the file name of the quiz that is going to be edited. Print that quiz to an arraylist. Ask for the quesiton that is going to be edited
+    // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
+    // print the new arraylist to the file and save it
 
     }
 
@@ -79,6 +82,14 @@ public class Teacher {
         Scanner scan = new Scanner(System.in);
         System.out.print("Enter the name of the quiz you want to delete.");
         String quizName = scan.nextLine();
+        File file = new File(quizname);
+ 
+        if (file.delete()) {
+            System.out.println("File deleted successfully");
+        }
+        else {
+            System.out.println("Failed to delete the file");
+        }
     }
 
     public void viewStudentSubmission() {
