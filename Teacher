@@ -65,7 +65,9 @@ public class Teacher {
     }
 
     public void deleteQuiz() {
-
+        Scanner scan = new Scanner(System.in);
+        System.out.print("Enter the name of the quiz you want to delete.");
+        String quizName = scan.nextLine();
     }
 
     public void viewStudentSubmission() {
