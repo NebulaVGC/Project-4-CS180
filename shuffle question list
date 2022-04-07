@@ -1,0 +1,35 @@
+try{
+            ArrayList<String> questions = new ArrayList<>();
+            File f = new File("quiz1.txt");
+            BufferedReader br = new BufferedReader(new FileReader(f));
+            String line = br.readLine();
+            int numq = 2;
+            int lineNum = 1;
+            int mult = 0;
+            while(line != null){
+                line = br.readLine();
+                ++lineNum;
+                if(lineNum == ( 2 + 5 * mult) && mult <= numq && line != null){
+                    mult++;
+                    String q = "";
+                    String ans = "";
+                    q = line + "\n";
+                    lineNum++;
+                    q += br.readLine() + "\n";
+                    lineNum++;
+                    q += br.readLine() + "\n";
+                    lineNum++;
+                    q += br.readLine() + "\n";
+                    lineNum++;
+                    q += br.readLine() + "\n";
+                    questions.add(q);
+                }
+            }
+            System.out.println("OG");
+            System.out.println(questions);
+            Collections.shuffle(questions);
+            System.out.println("NEW");
+            System.out.println(questions);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
