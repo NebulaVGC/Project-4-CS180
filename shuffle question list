@@ -33,3 +33,47 @@ try{
         } catch(Exception e){
             e.printStackTrace();
         }
+        
+        for (int i = 0; i < questions.size(); i++) {
+            System.out.println(allQuestions[i]);
+            String wholeQuestion = allQuestions[i];
+            String q = wholeQuestion.substring(0, wholeQuestion.indexOf("\n"));
+            String answerOptions = wholeQuestion.substring(wholeQuestion.indexOf("\n"));
+            String a = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String a1 = a.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            String b = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String b1 = b.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            String c = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String c1 = b.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            String d = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String d1 = b.substring(3);
+            ArrayList<String> answerHolder = new ArrayList<>();
+            answerHolder.add(a1);
+            answerHolder.add(b1);
+            answerHolder.add(c1);
+            answerHolder.add(d1);
+            Collections.shuffle(answerHolder);
+            String answerI = "";
+            for (int j = 0; j < 4; j++) {
+                if (j == 0) {
+                    answerI += ("\n" + "A. " + answerHolder.get(i));
+                } else if (j == 1) {
+                    answerI += ("\nB. " + answerHolder.get(i));
+                } else if (j == 2) {
+                    answerI += ("\nC. " + answerHolder.get(i));
+                } else if (j == 3) {
+                    answerI += ("\nD. " + answerHolder.get(i));
+                }
+            }
+            String total = q + answerI;
+            allQuestions[i] = total;
+        }
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        for (int k = 0; k < allQuestions.length; k++) {
+            bw.write(allQuestions[k]);
+        }
+        bw.close();
+    }
