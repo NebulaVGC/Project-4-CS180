@@ -47,6 +47,7 @@ public class Student {
             BufferedReader bfrCourse = new BufferedReader(frcourse);
             String line = bfrCourse.readLine();
             int counter = 0;
+            System.out.println("Course Options:");
             while (line != null) {
                 counter++;
                 System.out.println(counter + ". " + line);
@@ -83,6 +84,7 @@ public class Student {
             BufferedReader bfrCourse = new BufferedReader(frcourse);
             String line = bfrCourse.readLine();
             int counter = 0;
+            System.out.println("Quiz Options:");
             while (line != null) {
                 counter++;
                 System.out.println(counter + ". " + line);
@@ -137,23 +139,35 @@ public class Student {
                     n++;
                 }
             }
-            //loop back to here
-            String course = student.pickCourse(teacher + "_Courses");
-            String quiz = student.pickQuiz(teacher + "_" + course);
-            if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
-                student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
-            } else {
-                System.out.println("Quiz already taken");
-                //print (1. view quiz grade    2. exit back to courses)
-                //if option 1 show grade
-                //if option 2 loop to courses
-            }
-
-
-
+            int loop = 0;
+            do {
+                String course = student.pickCourse(teacher + "_Courses");
+                String quiz = student.pickQuiz(teacher + "_" + course);
+                if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
+                    student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
+                } else {
+                    System.out.println("Quiz already taken");
+                    int optionLoop = 0;
+                    while (optionLoop == 0) {
+                        System.out.println("1. View Quiz Grade\n2. Exit Back to Courses");
+                        String viewGrade = scan.nextLine();
+                        if (viewGrade.equals("1")) {
+                            //INPUT WAY TO CALCULATE GRADE. SHOULD BE BY READING THE LAST LINE OF user quiz file
+                            System.out.println("Grade: ");
+                            loop++;
+                            optionLoop++;
+                        } else if (viewGrade.equals("2")) {
+                            optionLoop++;
+                        } else {
+                            System.out.println("Invalid Input. Try again.");
+                        }
+                    }
+                }
+            } while (loop == 0);
         } catch(Exception e){
             e.printStackTrace();
         }
 
     }
 }
+
