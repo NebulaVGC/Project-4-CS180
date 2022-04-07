@@ -1,16 +1,15 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Scanner;
+import java.util.*;
 
 public class Student {
     Scanner scan = new Scanner(System.in);
     private String userName;
-    private String teacherUserName;
+    private boolean shuffle;
 
-    public Student(String userName, String teacherUserName) {
+    public Student(String userName, boolean shuffle) {
         this.userName = userName;
-        this.teacherUserName = teacherUserName;
+        this.shuffle = shuffle;
     }
 
     public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
@@ -29,7 +28,6 @@ public class Student {
                 answer = scan.nextLine().toUpperCase();
             }
             finalString = finalString + "\n" + answer;
-            br.readLine();
         }
         System.out.println("Thanks for taking the quiz!");
         String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -117,9 +115,9 @@ public class Student {
     public static void main(String[] args) {
         //takes place after login
         Scanner scan = new Scanner(System.in);
-        try{
-            Student student = new Student("username", "stacey");
-            int n  = 0;
+        try {
+            Student student = new Student("username", true);
+            int n = 0;
             String teacher = null;
             while (n == 0) {
                 BufferedReader br = new BufferedReader(new FileReader("TeacherAccount.txt"));
@@ -143,6 +141,7 @@ public class Student {
             do {
                 String course = student.pickCourse(teacher + "_Courses");
                 String quiz = student.pickQuiz(teacher + "_" + course);
+                student.shuffle(teacher + "_" + quiz);
                 if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
                     student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
                 } else {
@@ -152,8 +151,26 @@ public class Student {
                         System.out.println("1. View Quiz Grade\n2. Exit Back to Courses");
                         String viewGrade = scan.nextLine();
                         if (viewGrade.equals("1")) {
-                            //INPUT WAY TO CALCULATE GRADE. SHOULD BE BY READING THE LAST LINE OF user quiz file
-                            System.out.println("Grade: ");
+                            File f = new File(student.userName + "_" + teacher + "_" + course + "_" + quiz);
+                            BufferedReader brquiz = new BufferedReader(new FileReader(f));
+                            String quizLine = brquiz.readLine();
+                            int cline = 0;
+                            while (quizLine != null) {
+                                cline++;
+                                quizLine = brquiz.readLine(); //reads through all line
+                            }
+                            BufferedReader brquiz2 = new BufferedReader(new FileReader(f));//reads the same quiz j new bfr
+                            String lastLine = "";
+                            String grade = "";
+                            for (int i = 0; i < cline; i++) {
+                                lastLine = brquiz2.readLine();
+                            }
+                            if (lastLine.substring(lastLine.length() - 1).equals("%")) {
+                                grade = lastLine;
+                            } else {
+                                grade = "Grade not yet entered";
+                            }
+                            System.out.println("Grade: " + grade);
                             loop++;
                             optionLoop++;
                         } else if (viewGrade.equals("2")) {
@@ -164,33 +181,99 @@ public class Student {
                     }
                 }
             } while (loop == 0);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        
-        //GRADE CALC
-        File f = new File("quiz.txt");
-            BufferedReader brquiz = new BufferedReader(new FileReader(f));
-            String quizLine = brquiz.readLine();
-            int cline = 0;
-            while(quizLine != null){
-                cline++;
-                quizLine = brquiz.readLine(); //reads through all line
-            }
-            BufferedReader brquiz2 =  new BufferedReader(new FileReader(f));//reads the same quiz j new bfr
-            String lastLine = "";
-            String grade = "";
-            for(int i = 0; i < cline; i++){
-                lastLine = brquiz2.readLine();
-            }
-            if(lastLine.substring(lastLine.length() -1).equals("%")){
-                grade = lastLine;
-            }
-            else{
-                grade = "0%";
-            }
 
     }
-}
 
+    public void shuffle(String filename) throws IOException {
+        ArrayList<String> questions = new ArrayList<>();
+        File f = new File(filename);
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        BufferedReader bfr = new BufferedReader(new FileReader(filename));
+        String line = "";
+        int numq = 1;
+        while (bfr.readLine() != null) {
+            numq++;
+        }
+        bfr.close();
+        numq = numq / 5;
+        int lineNum = 1;
+        int mult = 0;
+        while(line != null){
+            line = br.readLine();
+            ++lineNum;
+            if(lineNum == ( 2 + 5 * mult) && mult <= numq && line != null){
+                mult++;
+                String q = "";
+                String ans = "";
+                q = line + "\n";
+                lineNum++;
+                q += br.readLine() + "\n";
+                lineNum++;
+                q += br.readLine() + "\n";
+                lineNum++;
+                q += br.readLine() + "\n";
+                lineNum++;
+                q += br.readLine() + "\n";
+                questions.add(q);
+            }
+        }
+        br.close();
+        Collections.shuffle(questions);
+
+        ArrayList<String> newQuestions = new ArrayList<>();
+        for (int i = 0; i < questions.size(); i++) {
+            String wholeQuestion = questions.get(i);
+            String q = wholeQuestion.substring(0, wholeQuestion.indexOf("\n"));
+            String answerOptions = wholeQuestion.substring(wholeQuestion.indexOf("\n"));
+            answerOptions = answerOptions.substring(1);
+            String a = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String a1 = a.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            answerOptions = answerOptions.substring(1);
+            String b = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String b1 = b.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            answerOptions = answerOptions.substring(1);
+            String c = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String c1 = c.substring(3);
+            answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
+            answerOptions = answerOptions.substring(1);
+            String d = answerOptions.substring(0, answerOptions.indexOf("\n"));
+            String d1 = d.substring(3);
+            ArrayList<String> answerHolder = new ArrayList<>();
+            answerHolder.add(a1);
+            answerHolder.add(b1);
+            answerHolder.add(c1);
+            answerHolder.add(d1);
+            Collections.shuffle(answerHolder);
+            String answerI = "";
+            for (int j = 0; j < 4; j++) {
+                if (j == 0) {
+                    answerI += ("\n" + "A. " + answerHolder.get(j));
+                } else if (j == 1) {
+                    answerI += ("\nB. " + answerHolder.get(j));
+                } else if (j == 2) {
+                    answerI += ("\nC. " + answerHolder.get(j));
+                } else if (j == 3) {
+                    answerI += ("\nD. " + answerHolder.get(j));
+                }
+            }
+
+            String total = q + answerI;
+            newQuestions.add(total);
+        }
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        for (int k = 0; k < newQuestions.size(); k++) {
+             if (k < newQuestions.size() - 1) {
+                 bw.write(newQuestions.get(k));
+                 bw.write("\n");
+             } else {
+                 bw.write(newQuestions.get(k));
+             }
+        }
+        bw.close();
+    }
+}
