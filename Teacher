@@ -4,16 +4,42 @@ import java.nio.file.ProviderNotFoundException;
 import java.util.Scanner;
 
 public class Teacher {
-    private String userName;
+    private String name;
     private String[] courses;
+    private String passWord;
     private Scanner scan = new Scanner(System.in);
 
-    public Teacher(String userName, String[] courses) {
-        this.userName = userName;
+    public Teacher(String name, String passWord, String[] courses) {
+        this.name = name;
         this.courses = courses;
+        this.passWord = passWord;
+        File f = new File(name + "_Courses");
+        try {
+            f.createNewFile();
+            PrintWriter pw = new PrintWriter(new FileOutputStream(f));
+            PrintWriter pw2 = null;
+            for (int i = 0; i < courses.length; i++) {
+                pw.println(courses[i]);
+                File f2 = new File(name + "_" + courses[i] + "_Quizzes");
+                f2.createNewFile();
+            }
+            pw.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public void createCourse(){
+    public String getName() {
+        return name;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void createCourse() {
         System.out.println("Enter the name of the new course");
         String courseName = scan.nextLine();
 
@@ -35,26 +61,26 @@ public class Teacher {
         System.out.println("What is the course this quiz is for?");
         course = scan.nextLine();
         //Check if this course exists
-        for(int i = 0; i < courses.length; i++) {
-            if(course.equals(courses[i])){
+        for (int i = 0; i < courses.length; i++) {
+            if (course.equals(courses[i])) {
                 contains = 1;
             }
         }
-        if(contains == 0) {
-            do{
+        if (contains == 0) {
+            do {
                 System.out.println("This course does not exist. Please enter another course");
                 course = scan.nextLine();
-                for(int i = 0; i < courses.length; i++) {
-                    if(course.equals(courses[i])){
+                for (int i = 0; i < courses.length; i++) {
+                    if (course.equals(courses[i])) {
                         contains = 1;
                     }
                 }
-            } while(contains == 0);
+            } while (contains == 0);
         }
         System.out.println("What is the name of the quiz?");
         quizName = scan.nextLine();
         try {
-            File f = new File(quizName);
+            File f = new File(name + "_" + quizName);
             pw = new PrintWriter(new FileOutputStream(f));
             f.createNewFile();
 
@@ -71,7 +97,7 @@ public class Teacher {
         System.out.println("1.Yes");
         System.out.println("2.No");
         choice = scan.nextInt();
-        while (choice == 1){
+        while (choice == 1) {
 
             System.out.println("Please type question " + count);
             scan.nextLine();
@@ -103,7 +129,7 @@ public class Teacher {
 
         }
 
-        System.out.print("The quiz is completed");
+        System.out.println("The quiz is completed");
 
         pw.close();
     }
@@ -116,30 +142,127 @@ public class Teacher {
 
     public void deleteQuiz() {
         Scanner scan = new Scanner(System.in);
-        System.out.print("Enter the name of the quiz you want to delete.");
+        System.out.println("Enter the name of the quiz you want to delete.");
         String quizName = scan.nextLine();
         File file = new File(quizName);
 
         if (file.delete()) {
             System.out.println("File deleted successfully");
-        }
-        else {
+        } else {
             System.out.println("Failed to delete the file");
         }
 
     }
 
     public void viewStudentSubmission() {
+        String student;
+        String course;
+        String quizName;
+        System.out.println("Enter the name of the student you would like to view");
+        student = scan.next();
+        System.out.println("Enter the quiz course");
+        course = scan.next();
+        System.out.println("Enter the name of the quiz");
+        quizName = scan.next();
+        File f = new File(student + "_" + name + "_" + course + "_" + quizName);
+        if (!f.exists()) {
+            System.out.println("This quiz does not exist");
+
+        } else {
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader(f));
+                String line = bfr.readLine();
+                System.out.println(line);
+                while (line != null) {
+                    line = bfr.readLine();
+                    System.out.println();
+                }
+                bfr.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
-    public void gradeQuiz() {
+    public void randomizeQuiz() {
 
     }
 
-    public static void main(String[] args) {
-        String[] s = {"Physics"};
-        Teacher teacher = new Teacher("Teacher 1",s);
-        teacher.createQuiz();
+    /*public void automaticGrade() {
+        String student;
+        String course;
+        String quizName;
+        int numCorrect;
+        int totalQuestions;
+        System.out.println("Enter the name of the student you would like to view");
+        student = scan.next();
+        System.out.println("Enter the quiz course");
+        course = scan.next();
+        System.out.println("Enter the name of the quiz");
+        quizName = scan.next();
+        File studentQuiz = new File(student + "_" + name + "_" + course + "_" + quizName);
+        if (!studentQuiz.exists()) {
+            System.out.println("This quiz does not exist");
+
+        } else {
+            File teacherQuiz = new File(name + "_" + quizName);
+            try {
+                BufferedReader bfr1 = new BufferedReader(new FileReader(studentQuiz));
+                BufferedReader bfr2 = new BufferedReader(new FileReader(teacherQuiz));
+                String line1 = bfr1.readLine();
+                String line2 = bfr2.readLine();
+                while (line2 != null) {
+                    bfr1.
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
+        public void manualGrade () {
+            String student;
+            String course;
+            String quizName;
+            int numCorrect;
+            int totalQuestions;
+            System.out.println("Enter the name of the student you would like to view");
+            student = scan.next();
+            System.out.println("Enter the quiz course");
+            course = scan.next();
+            System.out.println("Enter the name of the quiz");
+            quizName = scan.next();
+            File studentQuiz = new File(student + "_" + name + "_" + course + "_" + quizName);
+            if (!studentQuiz.exists()) {
+                System.out.println("This quiz does not exist");
+
+            } else {
+                File teacherQuiz = new File(name + "_" + quizName);
+                try {
+                    BufferedReader bfr1 = new BufferedReader(new FileReader(studentQuiz));
+                    BufferedReader bfr2 = new BufferedReader(new FileReader(teacherQuiz));
+                    String line1 = bfr1.readLine();
+                    String line2 = bfr2.readLine();
+                    while (line1.indexOf("Time") ) {
+                        bfr1.
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        public static void main (String[]args){
+            String[] s = {"Physics", "Math", "English"};
+            Teacher teacher = new Teacher("Teacher 1", "1234", s);
+            teacher.createQuiz();
+            teacher.deleteQuiz();
+        }
     }
-}
+
