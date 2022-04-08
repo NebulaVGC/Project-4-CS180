@@ -5,36 +5,58 @@ import java.util.*;
 public class Student {
     Scanner scan = new Scanner(System.in);
     private String userName;
-    private boolean shuffle;
 
-    public Student(String userName, boolean shuffle) {
+    public Student(String userName) {
         this.userName = userName;
-        this.shuffle = shuffle;
     }
 
     public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(quizName));
         File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName);
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-        String nextLine;
-        String finalString = userName;
+        String nextLine = "";
+        String shuffleStatus = br.readLine();
+        String copy = "";
+        String totalCopy = "";
+        String importedFile = "";
+        String copyQuiz = "";
+        int counter = 1;
+        int loop = 0;
         while ((nextLine = br.readLine()) != null) {
-            System.out.println(nextLine + "\n" + br.readLine() + "\n" +
-                    br.readLine() + "\n" + br.readLine() + "\n" + br.readLine());
-            String answer = scan.nextLine().toUpperCase();
-            while (!answer.equals("A") && !answer.equals("B") && !answer.equals("C") && !answer.equals("D")) {
-                System.out.println("INVALID ANSWER OPTION");
-                System.out.println("Please try again:");
-                answer = scan.nextLine().toUpperCase();
+            System.out.println(nextLine);
+            copyQuiz = copyQuiz + nextLine + "\n";
+            counter++;
+        }
+        counter = counter/5;
+        br.close();
+        System.out.println("Would you like to attach a file with answers or answer in the quiz?");
+        System.out.println("1. attach a file\n2. answer in the quiz");
+        while (loop == 0) {
+            String option = scan.nextLine();
+            if (option.equals("1")) {
+                System.out.println("Enter the name of the file you would like to import:");
+                importedFile = scan.nextLine();
+                BufferedReader bufferedReader3 = new BufferedReader(new FileReader(importedFile));
+                while ((copy = bufferedReader3.readLine()) != null) {
+                    totalCopy = totalCopy + copy + "\n";
+                }
+                loop++;
+            } else if (option.equals("2")) {
+                for (int i = 1; i <= counter; i++) {
+                    System.out.println("What is the answer to question " + i + ":");
+                    totalCopy = totalCopy + scan.nextLine().toUpperCase() + "\n";
+                }
+                loop++;
+            } else {
+                System.out.println("Invalid Input: Try Again");
             }
-            finalString = finalString + "\n" + answer;
         }
         System.out.println("Thanks for taking the quiz!");
         String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
-        finalString = finalString + "\n" + timeStamp;
-        bw.write(finalString);
+        totalCopy = shuffleStatus + "\n" + copyQuiz + userName + "\n" + totalCopy + timeStamp;
+        bw.write(totalCopy);
         bw.close();
-        br.close();
+
     }
 
     public String pickCourse(String filename) {
@@ -51,23 +73,27 @@ public class Student {
                 System.out.println(counter + ". " + line);
                 line = bfrCourse.readLine();
             }
+            System.out.println((counter + 1) + ". Exit");
             int courseSelector = 0;
             do {
                 System.out.println("Please select which course you would like to take?");
                 courseSelector = scan.nextInt();
                 scan.nextLine();
-                if (courseSelector <= 0 || courseSelector > counter) {
+                if (courseSelector <= 0 || courseSelector > counter + 1) {
                     System.out.println("Please enter a valid course id!");
                 }
-            } while (courseSelector <= 0 || courseSelector > counter);
-
+            } while (courseSelector <= 0 || courseSelector > counter + 1);
             courseName = "";
-            BufferedReader bfr = new BufferedReader(new FileReader(filename));
-            for (int i = 0; i < courseSelector; i++) {
-                courseName = bfr.readLine();
+            if (courseSelector == counter + 1) {
+                courseName = "end";
+            } else {
+                BufferedReader bfr = new BufferedReader(new FileReader(filename));
+                for (int i = 0; i < courseSelector; i++) {
+                    courseName = bfr.readLine();
+                }
+                bfr.close();
+                bfrCourse.close();
             }
-            bfr.close();
-            bfrCourse.close();
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -112,11 +138,11 @@ public class Student {
     }
 
 
-    public static void main(String[] args) {
+    public void mainStudent() {
         //takes place after login
         Scanner scan = new Scanner(System.in);
         try {
-            Student student = new Student("username", true);
+            Student student = new Student(this.userName);
             int n = 0;
             String teacher = null;
             while (n == 0) {
@@ -140,8 +166,15 @@ public class Student {
             int loop = 0;
             do {
                 String course = student.pickCourse(teacher + "_Courses");
+                if (course.equals("end")) {
+                    break;
+                }
                 String quiz = student.pickQuiz(teacher + "_" + course);
-                student.shuffle(teacher + "_" + quiz);
+                BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + quiz));
+                String shuffleStatus = bufferedReader2.readLine();
+                if (shuffleStatus.equalsIgnoreCase("True")) {
+                    student.shuffle(teacher + "_" + quiz);
+                }
                 if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
                     student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
                 } else {
@@ -194,6 +227,7 @@ public class Student {
         BufferedReader bfr = new BufferedReader(new FileReader(filename));
         String line = "";
         int numq = 1;
+        String shuffleStatus = bfr.readLine();
         while (bfr.readLine() != null) {
             numq++;
         }
@@ -201,6 +235,7 @@ public class Student {
         numq = numq / 5;
         int lineNum = 1;
         int mult = 0;
+        br.readLine();
         while(line != null){
             line = br.readLine();
             ++lineNum;
@@ -266,6 +301,8 @@ public class Student {
             newQuestions.add(total);
         }
         BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        bw.write(shuffleStatus);
+        bw.write("\n");
         for (int k = 0; k < newQuestions.size(); k++) {
              if (k < newQuestions.size() - 1) {
                  bw.write(newQuestions.get(k));
