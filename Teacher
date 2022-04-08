@@ -2,6 +2,7 @@ import java.awt.print.PrinterAbortException;
 import java.io.*;
 import java.nio.file.ProviderNotFoundException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Teacher {
@@ -9,8 +10,10 @@ public class Teacher {
     private String[] courses;
     private String passWord;
     private Scanner scan = new Scanner(System.in);
+    private ArrayList<String> course = new ArrayList<>();
 
-    public Teacher(String name, String passWord, String[] courses) {
+
+    public Teacher(String name, String[] courses) {
         this.name = name;
         this.courses = courses;
         this.passWord = passWord;
@@ -20,6 +23,7 @@ public class Teacher {
             PrintWriter pw = new PrintWriter(new FileOutputStream(f));
             PrintWriter pw2 = null;
             for (int i = 0; i < courses.length; i++) {
+                course.add(courses[i]);
                 pw.println(courses[i]);
                 File f2 = new File(name + "_" + courses[i] + "_Quizzes");
                 f2.createNewFile();
@@ -43,7 +47,7 @@ public class Teacher {
     public void createCourse() {
         System.out.println("Enter the name of the new course");
         String courseName = scan.next();
-
+        course.add(courseName);
         try {
             File f1 = new File(name + "_Courses");
             PrintWriter pw = new PrintWriter(new FileOutputStream(f1, true));
@@ -60,22 +64,31 @@ public class Teacher {
     }
 
     public void deleteCourse() {
-        System.out.println("Enter the name of the course you want to delete");
-        String courseName = scan.next();
+        String courseName;
+        do {
+            System.out.println("Enter the name of the course you want to delete or press 1 to exit");
+            courseName = scan.next();
+            if (course.indexOf(courseName) < 0) {
+                System.out.println("That course does not exist");
+            }
+
+        } while(course.indexOf(courseName) < 0 && !courseName.equals("1"));
+        course.remove(courseName);
     }
 
     public void createQuiz() {
-        String course;
+        String courseName;
         String quizName;
         int contains = 0;
         PrintWriter pw = null;
         PrintWriter pw2 = null;
+        boolean randomized = false;
 
 
         System.out.println("What is the course this quiz is for?");
-        course = scan.nextLine();
+        courseName = scan.next();
         //Check if this course exists
-        for (int i = 0; i < courses.length; i++) {
+        for (int i = 0; i < course.size(); i++) {
             if (course.equals(courses[i])) {
                 contains = 1;
             }
@@ -83,7 +96,7 @@ public class Teacher {
         if (contains == 0) {
             do {
                 System.out.println("This course does not exist. Please enter another course");
-                course = scan.nextLine();
+                courseName = scan.next();
                 for (int i = 0; i < courses.length; i++) {
                     if (course.equals(courses[i])) {
                         contains = 1;
@@ -92,19 +105,27 @@ public class Teacher {
             } while (contains == 0);
         }
         System.out.println("What is the name of the quiz?");
-        quizName = scan.nextLine();
+        quizName = scan.next();
+        File courseQuiz = new File(name + "_" + course + "_Quizzes");
+        PrintWriter pw3 = null;
+        try {
+            pw3 = new PrintWriter(new FileOutputStream(courseQuiz, true));
+            pw3.println(quizName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Do you want the quiz to be randomized? Y/N");
+        if(scan.next().equals("Y")) {
+            randomized = true;
+        }
+
         try {
             File f = new File(name + "_" + quizName);
             pw = new PrintWriter(new FileOutputStream(f));
-            File f2 = new File(name + "_" + quizName + "_answers");
-            pw2 = new PrintWriter(new FileOutputStream(f2));
-            f.createNewFile();
-            f2.createNewFile();
+
 
         } catch (FileNotFoundException e) {
             //Input Validation
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         int count = 1;
         int choice = 1;
@@ -114,6 +135,7 @@ public class Teacher {
         System.out.println("1.Yes");
         System.out.println("2.No");
         choice = scan.nextInt();
+        pw.println(randomized);
         while (choice == 1) {
 
             System.out.println("Please type question " + count);
@@ -128,8 +150,6 @@ public class Teacher {
             String answerC = scan.next();
             System.out.println("Please type answer option D");
             String answerD = scan.next();
-            System.out.println("Please enter the correct answer for question " + count);
-            String correctAnswer = scan.next();
             count = count + 1;
 
             pw.println(givenQuestion);
@@ -137,7 +157,6 @@ public class Teacher {
             pw.println(answerB);
             pw.println(answerC);
             pw.println(answerD);
-            pw2.println(correctAnswer);
             System.out.println("Do you want to add a question?");
             System.out.println("1.Yes");
             System.out.println("2.No");
@@ -149,20 +168,25 @@ public class Teacher {
         System.out.println("The quiz is completed");
 
         pw.close();
-        pw2.close();
+        pw3.close();
     }
 
     public void editQuiz() {
         //ask for the file name of the quiz that is going to be edited. Print that quiz to an arraylist. Ask for the quesiton that is going to be edited
         // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
         // print the new arraylist to the file and save it
+
+
     }
 
     public void deleteQuiz() {
         Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the course the quiz is in");
+        String courseName = scan.next();
+
         System.out.println("Enter the name of the quiz you want to delete.");
-        String quizName = scan.nextLine();
-        File file = new File(quizName);
+        String quizName = scan.next();
+        File file = new File(name + "_" + quizName);
 
         if (file.delete()) {
             System.out.println("File deleted successfully");
@@ -193,7 +217,7 @@ public class Teacher {
                 System.out.println(line);
                 while (line != null) {
                     line = bfr.readLine();
-                    System.out.println();
+                    System.out.println(line);
                 }
                 bfr.close();
             } catch (FileNotFoundException e) {
@@ -202,10 +226,6 @@ public class Teacher {
                 e.printStackTrace();
             }
         }
-
-    }
-
-    public void randomizeQuiz() {
 
     }
 
@@ -259,28 +279,32 @@ public class Teacher {
             if (!studentQuiz.exists()) {
                 System.out.println("This quiz does not exist");
 
+
             } else {
                 File teacherQuiz = new File(name + "_" + quizName);
                 try {
-                    BufferedReader bfr1 = new BufferedReader(new FileReader(studentQuiz));
-                    BufferedReader bfr2 = new BufferedReader(new FileReader(teacherQuiz));
-                    ArrayList<String> studentAnswers = new ArrayList<>();
+                    BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));
+                    BufferedReader bfrAnswers = new BufferedReader(new FileReader(studentQuiz));
+                    ArrayList<String> entireFile = new ArrayList<>();
                     ArrayList<String> correct = new ArrayList<>();
-                    String line1 = bfr1.readLine();
-                    String line2 = bfr2.readLine();
-                    while(line1 != null) {
-                        System.out.println(line2);
-                        line2 = bfr2.readLine();
-                        System.out.println(line2);
-                        line2 = bfr2.readLine();
-                        System.out.println(line2);
-                        line2 = bfr2.readLine();
-                        System.out.println(line2);
-                        line2 = bfr2.readLine();
-                        System.out.println(line2);
-                        line2 = bfr2.readLine();
-                        System.out.println("Student Answer: " + line1);
-                        studentAnswers.add(line1);
+                    String questionLine = bfrQuestions.readLine();
+                    questionLine = bfrQuestions.readLine();
+                    String answerLine = bfrAnswers.readLine();
+                    while(!answerLine.equals("A") && !answerLine.equals("B") && !answerLine.equals("C") && !answerLine.equals("D")){
+                        answerLine = bfrAnswers.readLine();
+                    }
+                    while(answerLine.equals("A") || answerLine.equals("B") || answerLine.equals("C") ||answerLine.equals("D")) {
+                        System.out.println(questionLine);
+                        questionLine = bfrQuestions.readLine();
+                        System.out.println(questionLine);
+                        questionLine = bfrQuestions.readLine();
+                        System.out.println(questionLine);
+                        questionLine = bfrQuestions.readLine();
+                        System.out.println(questionLine);
+                        questionLine = bfrQuestions.readLine();
+                        System.out.println(questionLine);
+                        System.out.println("Student Answer: " + answerLine);
+                        answerLine = bfrAnswers.readLine();
                         String yesNo = null;
                         do {
                             System.out.println("Is this correct? Y/N");
@@ -293,25 +317,40 @@ public class Teacher {
                             }
                         } while(!yesNo.equals("Y") && !yesNo.equals("N"));
                         correct.add(yesNo);
-                        line1 = bfr1.readLine();
+                        questionLine = bfrQuestions.readLine();
                     }
 
+                    BufferedReader bfr3 = new BufferedReader(new FileReader(studentQuiz));
+                    String line = bfr3.readLine();
+                    line = bfr3.readLine();
+                    while(line != null) {
+                        entireFile.add(line);
+                        line = bfr3.readLine();
+                    }
                     double percentage = (double) numCorrect / correct.size() * 100;
-                    System.out.println("Grade: " + percentage);
                     PrintWriter pw = new PrintWriter(new FileOutputStream(studentQuiz));
-                    for (int i = 0; i < studentAnswers.size(); i++) {
+                    int j = 0;
+                    for (int i = 0; i < entireFile.size(); i++) {
 
-                        if(correct.get(i).equals("Y")) {
-
-                            pw.println(studentAnswers.get(i) + " Correct");
+                        if(entireFile.get(i).equals("A") || entireFile.get(i).equals("B") ||
+                                entireFile.get(i).equals("C") || entireFile.get(i).equals("D")) {
+                            if(correct.get(j).equals("Y")) {
+                                pw.println(entireFile.get(i) + " Correct");
+                            } else {
+                                pw.println(entireFile.get(i) + " Incorrect");
+                            }
+                            j++;
                         } else {
-                            pw.println(studentAnswers.get(i) + " Wrong");
+                            pw.println(entireFile.get(i));
                         }
+
                     }
+                    pw.println(percentage + "%");
 
                     pw.close();
-                    bfr1.close();
-                    bfr2.close();
+                    bfrQuestions.close();
+                    bfrAnswers.close();
+                    bfr3.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -321,7 +360,7 @@ public class Teacher {
         }
         public static void main (String[]args){
             String[] s = {"Physics", "Math", "English"};
-            Teacher teacher = new Teacher("Teacher", "1234", s);
+            Teacher teacher = new Teacher("Teacher", s);
             teacher.teacherInterface();
 
 
@@ -332,39 +371,44 @@ public class Teacher {
 
         public void teacherInterface() {
             int choice = 0;
-            System.out.println("What would you like to do?\n1. Create Quiz\n2. Edit Quiz\n3. Delete Quiz");
-            System.out.println("4. Grade Quiz\n5. View Student Submission\n6. Create Course\n7. Delete Course");
-            System.out.println("8. Exit");
-            do {
-                choice = scan.nextInt();
-                if(choice < 1 || choice > 8) {
-                    System.out.println("Not an option");
-                }
-            } while(choice < 1 || choice > 8);
+            while (choice != 8) {
 
-            if(choice == 1) {
-                createQuiz();
+                do{
+                    choice = 0;
+
+                System.out.println("What would you like to do?\n1. Create Quiz\n2. Edit Quiz\n3. Delete Quiz");
+                System.out.println("4. Grade Quiz\n5. View Student Submission\n6. Create Course\n7. Delete Course");
+                System.out.println("8. Exit");
+                try {
+                    choice = scan.nextInt();
+                }
+                catch(InputMismatchException e) {
+                    choice = 0;
+                }
+                if (choice < 1 || choice > 8) {
+                    System.out.println("Not an option\n");
+                    choice = 0;
+                }
+
+                } while (choice < 1 || choice > 8);
+
+                if (choice == 1) {
+                    createQuiz();
+                } else if (choice == 2) {
+                    editQuiz();
+                } else if (choice == 3) {
+                    deleteQuiz();
+                } else if (choice == 4) {
+                    manualGrade();
+                } else if (choice == 5) {
+                    viewStudentSubmission();
+                } else if (choice == 6) {
+                    createCourse();
+                } else if (choice == 7) {
+                    deleteCourse();
+                }
             }
-            else if(choice == 2) {
-                editQuiz();
-            }
-            else if(choice == 3) {
-                deleteQuiz();
-            }
-            else if(choice == 4) {
-                manualGrade();
-            }
-            else if(choice == 5) {
-                viewStudentSubmission();
-            }
-            else if(choice == 6) {
-                createCourse();
-            }
-            else if(choice == 7) {
-                deleteCourse();
-            } else {
-                return;
-            }
+            System.out.println("Goodbye!");
         }
     }
 
