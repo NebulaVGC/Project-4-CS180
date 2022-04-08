@@ -4,10 +4,10 @@ public class MainMethod extends Run {
         String[] splited = Username.split(" ");
         if (Username.equals("")) {
             return;
-        } else if (splited[0].equals("Teacher")) {
-            Teacher teacher = new Teacher(Username);
         } else if (splited[0].equals("Student")) {
+            Username = Username.substring(8);
             Student student = new Student(Username);
+            student.mainStudent();
         }
     }
 }
