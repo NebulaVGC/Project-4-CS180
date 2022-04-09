@@ -65,34 +65,43 @@ public class Student {
             File course = new File(filename);
             FileReader frcourse = new FileReader(course);
             BufferedReader bfrCourse = new BufferedReader(frcourse);
-            String line = bfrCourse.readLine();
-            int counter = 0;
-            System.out.println("Course Options:");
-            while (line != null) {
-                counter++;
-                System.out.println(counter + ". " + line);
-                line = bfrCourse.readLine();
-            }
-            System.out.println((counter + 1) + ". Exit");
-            int courseSelector = 0;
-            do {
-                System.out.println("Please select which course you would like to take?");
-                courseSelector = scan.nextInt();
-                scan.nextLine();
-                if (courseSelector <= 0 || courseSelector > counter + 1) {
-                    System.out.println("Please enter a valid course id!");
-                }
-            } while (courseSelector <= 0 || courseSelector > counter + 1);
+            BufferedReader br = new BufferedReader(new FileReader(filename));
             courseName = "";
-            if (courseSelector == counter + 1) {
+            if (br.readLine() == null) {
+                System.out.println("No Courses available");
                 courseName = "end";
+                br.close();
             } else {
-                BufferedReader bfr = new BufferedReader(new FileReader(filename));
-                for (int i = 0; i < courseSelector; i++) {
-                    courseName = bfr.readLine();
+                br.close();
+                String line = bfrCourse.readLine();
+                int counter = 0;
+                System.out.println("Course Options:");
+                while (line != null) {
+                    counter++;
+                    System.out.println(counter + ". " + line);
+                    line = bfrCourse.readLine();
                 }
-                bfr.close();
-                bfrCourse.close();
+                System.out.println((counter + 1) + ". Exit");
+                int courseSelector = 0;
+                do {
+                    System.out.println("Please select which course you would like to take?");
+                    courseSelector = scan.nextInt();
+                    scan.nextLine();
+                    if (courseSelector <= 0 || courseSelector > counter + 1) {
+                        System.out.println("Please enter a valid course id!");
+                    }
+                } while (courseSelector <= 0 || courseSelector > counter + 1);
+
+                if (courseSelector == counter + 1) {
+                    courseName = "end";
+                } else {
+                    BufferedReader bfr = new BufferedReader(new FileReader(filename));
+                    for (int i = 0; i < courseSelector; i++) {
+                        courseName = bfr.readLine();
+                    }
+                    bfr.close();
+                    bfrCourse.close();
+                }
             }
         } catch (IOException io) {
             io.printStackTrace();
@@ -106,35 +115,44 @@ public class Student {
             File course = new File(filename);
             FileReader frcourse = new FileReader(course);
             BufferedReader bfrCourse = new BufferedReader(frcourse);
-            String line = bfrCourse.readLine();
-            int counter = 0;
-            System.out.println("Quiz Options:");
-            while (line != null) {
-                counter++;
-                System.out.println(counter + ". " + line);
-                line = bfrCourse.readLine();
-            }
-            System.out.println((counter + 1) + ". Exit");
-            int courseSelector = 0;
-            do {
-                System.out.println("Please select which quiz you would like to take?");
-                courseSelector = scan.nextInt();
-                scan.nextLine();
-                if (courseSelector <= 0 || courseSelector > counter + 1) {
-                    System.out.println("Please enter a valid quiz id!");
-                }
-            } while (courseSelector <= 0 || courseSelector > counter + 1);
-
+            BufferedReader br = new BufferedReader(new FileReader(filename));
             courseName = "";
-            if (courseSelector == counter + 1) {
+            if (br.readLine() == null) {
+                System.out.println("No quizzes available");
                 courseName = "end";
+                br.close();
             } else {
-                BufferedReader bfr = new BufferedReader(new FileReader(filename));
-                for (int i = 0; i < courseSelector; i++) {
-                    courseName = bfr.readLine();
+                br.close();
+                String line = bfrCourse.readLine();
+                int counter = 0;
+                System.out.println("Quiz Options:");
+                while (line != null) {
+                    counter++;
+                    System.out.println(counter + ". " + line);
+                    line = bfrCourse.readLine();
                 }
-                bfr.close();
-                bfrCourse.close();
+                System.out.println((counter + 1) + ". Exit");
+                int courseSelector = 0;
+                do {
+                    System.out.println("Please select which quiz you would like to take?");
+                    courseSelector = scan.nextInt();
+                    scan.nextLine();
+                    if (courseSelector <= 0 || courseSelector > counter + 1) {
+                        System.out.println("Please enter a valid quiz id!");
+                    }
+                } while (courseSelector <= 0 || courseSelector > counter + 1);
+
+
+                if (courseSelector == counter + 1) {
+                    courseName = "end";
+                } else {
+                    BufferedReader bfr = new BufferedReader(new FileReader(filename));
+                    for (int i = 0; i < courseSelector; i++) {
+                        courseName = bfr.readLine();
+                    }
+                    bfr.close();
+                    bfrCourse.close();
+                }
             }
         } catch (IOException io) {
             io.printStackTrace();
