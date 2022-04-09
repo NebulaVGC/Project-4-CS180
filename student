@@ -114,23 +114,28 @@ public class Student {
                 System.out.println(counter + ". " + line);
                 line = bfrCourse.readLine();
             }
+            System.out.println((counter + 1) + ". Exit");
             int courseSelector = 0;
             do {
                 System.out.println("Please select which quiz you would like to take?");
                 courseSelector = scan.nextInt();
                 scan.nextLine();
-                if (courseSelector <= 0 || courseSelector > counter) {
+                if (courseSelector <= 0 || courseSelector > counter + 1) {
                     System.out.println("Please enter a valid quiz id!");
                 }
-            } while (courseSelector <= 0 || courseSelector > counter);
+            } while (courseSelector <= 0 || courseSelector > counter + 1);
 
             courseName = "";
-            BufferedReader bfr = new BufferedReader(new FileReader(filename));
-            for (int i = 0; i < courseSelector; i++) {
-                courseName = bfr.readLine();
+            if (courseSelector == counter + 1) {
+                courseName = "end";
+            } else {
+                BufferedReader bfr = new BufferedReader(new FileReader(filename));
+                for (int i = 0; i < courseSelector; i++) {
+                    courseName = bfr.readLine();
+                }
+                bfr.close();
+                bfrCourse.close();
             }
-            bfr.close();
-            bfrCourse.close();
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -190,6 +195,9 @@ public class Student {
                     }
                 } else {
                     String quiz = student.pickQuiz(teacher + "_" + course);
+                    if (quiz.equals("end")) {
+                        break;
+                    }
                     BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + quiz));
                     String shuffleStatus = bufferedReader2.readLine();
                     if (shuffleStatus.equalsIgnoreCase("True")) {
