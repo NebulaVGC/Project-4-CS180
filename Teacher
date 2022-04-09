@@ -13,15 +13,14 @@ public class Teacher {
     private ArrayList<String> course = new ArrayList<>();
 
 
-    public Teacher(String name, String[] courses) {
+    public Teacher(String name/*, String[] courses*/) {
         this.name = name;
         this.courses = courses;
         this.passWord = passWord;
         File f = new File(name + "_Courses");
         try {
             f.createNewFile();
-            PrintWriter pw = new PrintWriter(new FileOutputStream(f));
-            PrintWriter pw2 = null;
+            /*PrintWriter pw = new PrintWriter(new FileOutputStream(f));
             for (int i = 0; i < courses.length; i++) {
                 course.add(courses[i]);
                 pw.println(courses[i]);
@@ -29,7 +28,7 @@ public class Teacher {
                 f2.createNewFile();
             }
             pw.close();
-
+*/
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,15 +64,51 @@ public class Teacher {
 
     public void deleteCourse() {
         String courseName;
+        ArrayList<String> list = new ArrayList<>();
         do {
-            System.out.println("Enter the name of the course you want to delete or press 1 to exit");
+            System.out.println("Enter the name of the course you want to delete or press N to exit");
             courseName = scan.next();
-            if (course.indexOf(courseName) < 0) {
+            if(courseName.equals("N")) {
+                return;
+            }
+            else if (course.indexOf(courseName) < 0) {
                 System.out.println("That course does not exist");
             }
 
-        } while(course.indexOf(courseName) < 0 && !courseName.equals("1"));
+        } while(course.indexOf(courseName) < 0);
         course.remove(courseName);
+        File f = new File(name + "_Courses");
+        try {
+            BufferedReader bfr = new BufferedReader(new FileReader(f));
+            String line = bfr.readLine();
+            while(line != null) {
+                if(!line.equals(courseName)) {
+                    list.add(line);
+                    line = bfr.readLine();
+                } else {
+                    line = bfr.readLine();
+                }
+            }
+            PrintWriter pw = new PrintWriter(new FileOutputStream(f));
+            for (int i = 0; i < list.size(); i++) {
+                pw.println(list.get(i));
+            }
+            pw.close();
+            bfr.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+            File f1 = new File(name + "_" + courseName + "_Quizzes");
+        if(f1.delete()) {
+            System.out.println("Course deleted successfully!");
+        } else {
+            System.out.println("Course could not be deleted");
+        }
+
     }
 
     public void createQuiz() {
@@ -175,17 +210,77 @@ public class Teacher {
         //ask for the file name of the quiz that is going to be edited. Print that quiz to an arraylist. Ask for the quesiton that is going to be edited
         // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
         // print the new arraylist to the file and save it
+        ArrayList<String> list = new ArrayList<>();
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Enter the course the quiz is in");
+        String courseName = scan.nextLine();
+        do {
+            if(course.indexOf(courseName) < 0) {
+                System.out.println("That course does not exist. Enter another course or press N to exit");
+                courseName = scan.nextLine();
+                if(courseName.equals("N")) {
+                    return;
+                }
+            }
+        } while(course.indexOf(courseName) < 0);
+        System.out.println("Enter the name of the quiz you want to edit.");
+        String quizName = scan.nextLine();
+        File f2;
+        do {
+            f2 = new File(name + "_" + quizName);
+            if(!f2.exists()) {
+                System.out.println("That quiz does not exist. Enter another quiz or press N to exit");
+                quizName = scan.nextLine();
+                f2 = new File(name + "_" + quizName);
+            }
+            if(quizName.equals("N")){
+                return;
+            }
 
+        } while(!f2.exists());
+        try {
+            int counter = 1;
+            int lineNumber = 0;
+            String newLine = "";
+            BufferedReader bfr = new BufferedReader(new FileReader(f2));
+            String line = bfr.readLine();
+            while(line != null) {
+                System.out.println(counter + ": " + line);
+                list.add(line);
+                line = bfr.readLine();
+                counter++;
+            }
+            System.out.println("Enter the number of the line you would like to edit");
+            lineNumber = scan.nextInt();
+            System.out.println(list.get(lineNumber - 1));
+            System.out.println("What should the line say now?");
+            String temp = scan.next();
+            newLine = temp + scan.nextLine();
+
+            list.set(lineNumber - 1, newLine);
+            PrintWriter pw = new PrintWriter(new FileOutputStream(f2));
+            for(int i = 0; i < list.size(); i ++) {
+                pw.println(list.get(i));
+            }
+            System.out.println("Quiz edited successfully");
+            pw.close();
+            bfr.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void deleteQuiz() {
         Scanner scan = new Scanner(System.in);
         System.out.println("Enter the course the quiz is in");
-        String courseName = scan.next();
+        String courseName = scan.nextLine();
 
         System.out.println("Enter the name of the quiz you want to delete.");
-        String quizName = scan.next();
+        String quizName = scan.nextLine();
         File file = new File(name + "_" + quizName);
 
         if (file.delete()) {
@@ -359,8 +454,10 @@ public class Teacher {
             }
         }
         public static void main (String[]args){
-            String[] s = {"Physics", "Math", "English"};
+            /*String[] s = {"Physics", "Math", "English"};
             Teacher teacher = new Teacher("Teacher", s);
+            teacher.teacherInterface();*/
+            Teacher teacher = new Teacher("Teacher");
             teacher.teacherInterface();
 
 
