@@ -18,18 +18,18 @@ public class Student {
         File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         String nextLine = "";
-        String shuffleStatus = br.readLine();
+        String shuffleStatus = br.readLine(); //reads the first line, determines whether it will be shuffled
         String copy = "";
         String totalCopy = "";
         String importedFile = "";
-        String copyQuiz = "";
-        int counter = 0;
-        int loop = 0;
+        String copyQuiz = ""; //copy of the quiz
+        int counter = 0; //counts lines
+        int loop = 0; //used for infinite loops
         int number = 1;
-        String firstLine;
-        String secondLine;
-        String thirdLine;
-        String fourthLine;
+        String firstLine; // stores answer a
+        String secondLine; //stores answer b
+        String thirdLine; //stores answer c
+        String fourthLine; //stores answer d
         while ((nextLine = br.readLine()) != null) { //reads line until null
             firstLine = br.readLine();
             secondLine = br.readLine();
@@ -38,16 +38,16 @@ public class Student {
             System.out.println(number + ". " + nextLine + "\n" + firstLine + "\n" + secondLine +
                     "\n" + thirdLine + "\n" + fourthLine);
             copyQuiz = copyQuiz + nextLine + "\n" + firstLine + "\n" + secondLine +
-                    "\n" + thirdLine + "\n" + fourthLine + "\n";
+                    "\n" + thirdLine + "\n" + fourthLine + "\n"; //copies the whole quiz
             counter++;
             number++;
         }
         br.close();
-        System.out.println("Would you like to attach a file with answers or answer in the quiz?");
+        System.out.println("Would you like to attach a file with answers or answer in the quiz?"); //gives user the option
         System.out.println("1. attach a file\n2. answer in the quiz"); //gives student the choice to attach a file
         while (loop == 0) {
             String option = scan.nextLine();
-            if (option.equals("1")) {
+            if (option.equals("1")) { //import file
                 System.out.println("Enter the name of the file you would like to import:");
                 importedFile = scan.nextLine();
                 BufferedReader bufferedReader3 = new BufferedReader(new FileReader(importedFile));
@@ -55,7 +55,7 @@ public class Student {
                     totalCopy = totalCopy + copy + "\n";
                 }
                 loop++;
-            } else if (option.equals("2")) {
+            } else if (option.equals("2")) { //take quiz on terminal
                 for (int i = 1; i <= counter; i++) {
                     System.out.println("What is the answer to question " + i + ":");
                     totalCopy = totalCopy + scan.nextLine().toUpperCase() + "\n";
@@ -90,7 +90,7 @@ public class Student {
                 br.close();
             } else {
                 br.close();
-                String line = bfrCourse.readLine();
+                String line = bfrCourse.readLine(); //read first line
                 int counter = 0;
                 System.out.println("Course Options:");
                 while (line != null) { //prints out each course option
@@ -148,10 +148,10 @@ public class Student {
                 System.out.println("Quiz Options:");
                 while (line != null) {
                     counter++;
-                    System.out.println(counter + ". " + line);
+                    System.out.println(counter + ". " + line); //prints a number in front of each quiz
                     line = bfrCourse.readLine();
                 }
-                System.out.println((counter + 1) + ". Exit");
+                System.out.println((counter + 1) + ". Exit"); //prints exit option numbered
                 int courseSelector = 0;
                 do { //input validation
                     System.out.println("Please select which quiz you would like to take?");
