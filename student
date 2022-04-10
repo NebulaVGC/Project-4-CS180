@@ -12,7 +12,7 @@ public class Student {
 
     public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(quizName));
-        File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName);
+        File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         String nextLine = "";
         String shuffleStatus = br.readLine();
@@ -20,14 +20,25 @@ public class Student {
         String totalCopy = "";
         String importedFile = "";
         String copyQuiz = "";
-        int counter = 1;
+        int counter = 0;
         int loop = 0;
+        int number = 1;
+        String firstLine;
+        String secondLine;
+        String thirdLine;
+        String fourthLine;
         while ((nextLine = br.readLine()) != null) {
-            System.out.println(nextLine);
-            copyQuiz = copyQuiz + nextLine + "\n";
+            firstLine = br.readLine();
+            secondLine = br.readLine();
+            thirdLine = br.readLine();
+            fourthLine = br.readLine();
+            System.out.println(number + ". " + nextLine + "\n" + firstLine + "\n" + secondLine +
+                    "\n" + thirdLine + "\n" + fourthLine);
+            copyQuiz = copyQuiz + nextLine + "\n" + firstLine + "\n" + secondLine +
+                    "\n" + thirdLine + "\n" + fourthLine + "\n";
             counter++;
+            number++;
         }
-        counter = counter/5;
         br.close();
         System.out.println("Would you like to attach a file with answers or answer in the quiz?");
         System.out.println("1. attach a file\n2. answer in the quiz");
@@ -185,19 +196,19 @@ public class Student {
                     n++;
                 }
             }
-            if (!new File(teacher + "_Courses").exists()) {
+            if (!new File(teacher + "_Courses.txt").exists()) {
                 System.out.println("Your teacher has not created any courses");
                 return;
             }
             int loop = 0;
 
             do {
-                String course = student.pickCourse(teacher + "_Courses");
+                String course = student.pickCourse(teacher + "_Courses.txt");
                 if (course.equals("end")) {
                     break;
                 }
                 int z = 0;
-                if (!new File(teacher + "_" + course).exists()) {
+                if (!new File(teacher + "_" + course + ".txt").exists()) {
                     while (z == 0) {
                         System.out.println("There are no quizzes in this course");
                         System.out.println("1. Return to course selection\n2. Exit");
@@ -211,7 +222,8 @@ public class Student {
                         }
                     }
                 } else {
-                    String quiz = student.pickQuiz(teacher + "_" + course);
+                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt");
+                    System.out.println(quiz);
                     if (quiz.equals("end")) {
                         break;
                     } else if (quiz.equals("empty")) {
@@ -229,13 +241,13 @@ public class Student {
                             }
                         }
                     } else {
-                        BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + quiz));
+                        BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + course + "_" + quiz + ".txt"));
                         String shuffleStatus = bufferedReader2.readLine();
                         if (shuffleStatus.equalsIgnoreCase("True")) {
-                            student.shuffle(teacher + "_" + quiz);
+                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt");
                         }
-                        if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz).exists()) {
-                            student.runQuiz(teacher + "_" + quiz, student.userName, teacher, course, quiz);
+                        if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt").exists()) {
+                            student.runQuiz(teacher + "_" + course + "_" + quiz + ".txt", student.userName, teacher, course, quiz);
                         } else {
                             System.out.println("Quiz already taken");
                             int optionLoop = 0;
@@ -243,7 +255,7 @@ public class Student {
                                 System.out.println("1. View Quiz Grade\n2. Exit Back to Courses");
                                 String viewGrade = scan.nextLine();
                                 if (viewGrade.equals("1")) {
-                                    File f = new File(student.userName + "_" + teacher + "_" + course + "_" + quiz);
+                                    File f = new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt");
                                     BufferedReader brquiz = new BufferedReader(new FileReader(f));
                                     String quizLine = brquiz.readLine();
                                     int cline = 0;
@@ -251,7 +263,7 @@ public class Student {
                                         cline++;
                                         quizLine = brquiz.readLine(); //reads through all line
                                     }
-                                    BufferedReader brquiz2 = new BufferedReader(new FileReader(f));//reads the same quiz j new bfr
+                                    BufferedReader brquiz2 = new BufferedReader(new FileReader(f)); //reads the same quiz with new bfr
                                     String lastLine = "";
                                     String grade = "";
                                     for (int i = 0; i < cline; i++) {
@@ -374,4 +386,4 @@ public class Student {
         }
         bw.close();
     }
-}
+
