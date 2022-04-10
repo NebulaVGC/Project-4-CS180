@@ -175,16 +175,16 @@ public class Student {
         //takes place after login
         Scanner scan = new Scanner(System.in);
         try {
-            Student student = new Student(this.userName);
+            Student student = new Student(this.userName); //creates Student object
             int n = 0;
-            String teacher = null;
+            String teacher = null; //initiates string to store teachers username
             while (n == 0) {
                 BufferedReader br = new BufferedReader(new FileReader("TeacherAccount.txt"));
                 System.out.println("What is the username of your teacher?");
-                teacher = scan.nextLine();
+                teacher = scan.nextLine(); //user input to teacher string
                 String newLine = "";
-                boolean validTeacher = false;
-                while ((newLine = br.readLine()) != null) {
+                boolean validTeacher = false;  //boolean which states whether or not the teacher account exists
+                while ((newLine = br.readLine()) != null) { //looks for inputted teacher username in accounts file
                     if (newLine.equals(teacher)) {
                         validTeacher = true;
                         break;
@@ -196,15 +196,15 @@ public class Student {
                     n++;
                 }
             }
-            if (!new File(teacher + "_Courses.txt").exists()) {
+            if (!new File(teacher + "_Courses.txt").exists()) { //prints error if the teacher has not created any courses
                 System.out.println("Your teacher has not created any courses");
                 return;
             }
-            int loop = 0;
+            int loop = 0; //initiates looping variable
 
             do {
-                String course = student.pickCourse(teacher + "_Courses.txt");
-                if (course.equals("end")) {
+                String course = student.pickCourse(teacher + "_Courses.txt"); //runs method to have student pick a course
+                if (course.equals("end")) {  //breaks out of loops is "end" is returned for pickCourse method
                     break;
                 }
                 int z = 0;
@@ -222,11 +222,11 @@ public class Student {
                         }
                     }
                 } else {
-                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt");
+                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt"); //runs method to have student pick a quiz
                     System.out.println(quiz);
                     if (quiz.equals("end")) {
                         break;
-                    } else if (quiz.equals("empty")) {
+                    } else if (quiz.equals("empty")) { //if there is a file created but is empty
                         int y = 0;
                         while (y == 0) {
                             System.out.println("There are no quizzes in this course");
@@ -242,11 +242,11 @@ public class Student {
                         }
                     } else {
                         BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + course + "_" + quiz + ".txt"));
-                        String shuffleStatus = bufferedReader2.readLine();
+                        String shuffleStatus = bufferedReader2.readLine(); //whether or not to shuffle the quiz
                         if (shuffleStatus.equalsIgnoreCase("True")) {
-                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt");
+                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt"); //shuffles quiz
                         }
-                        if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt").exists()) {
+                        if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt").exists()) { //checks if quiz has already been taken. if not then runs the quiz
                             student.runQuiz(teacher + "_" + course + "_" + quiz + ".txt", student.userName, teacher, course, quiz);
                         } else {
                             System.out.println("Quiz already taken");
@@ -293,19 +293,19 @@ public class Student {
 
     }
 
-    public void shuffle(String filename) throws IOException {
-        ArrayList<String> questions = new ArrayList<>();
+    public void shuffle(String filename) throws IOException {   //Shuffles the question order and the answer order of the quiz file
+        ArrayList<String> questions = new ArrayList<>();   //array that stores full questions with answers attached
         File f = new File(filename);
         BufferedReader br = new BufferedReader(new FileReader(f));
         BufferedReader bfr = new BufferedReader(new FileReader(filename));
-        String line = "";
+        String line = "";       //initiates a string
         int numq = 1;
         String shuffleStatus = bfr.readLine();
         while (bfr.readLine() != null) {
-            numq++;
+            numq++;           //counts the number of lines in file
         }
         bfr.close();
-        numq = numq / 5;
+        numq = numq / 5;   //counts number of questions
         int lineNum = 1;
         int mult = 0;
         br.readLine();
@@ -329,36 +329,36 @@ public class Student {
             }
         }
         br.close();
-        Collections.shuffle(questions);
+        Collections.shuffle(questions);  //shuffles question order
 
-        ArrayList<String> newQuestions = new ArrayList<>();
+        ArrayList<String> newQuestions = new ArrayList<>(); //list that new shuffled answers will be stored in
         for (int i = 0; i < questions.size(); i++) {
-            String wholeQuestion = questions.get(i);
-            String q = wholeQuestion.substring(0, wholeQuestion.indexOf("\n"));
+            String wholeQuestion = questions.get(i); //stores one question
+            String q = wholeQuestion.substring(0, wholeQuestion.indexOf("\n")); //question line
             String answerOptions = wholeQuestion.substring(wholeQuestion.indexOf("\n"));
             answerOptions = answerOptions.substring(1);
             String a = answerOptions.substring(0, answerOptions.indexOf("\n"));
-            String a1 = a.substring(3);
+            String a1 = a.substring(3);   //answer option A without "A. "
             answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
             answerOptions = answerOptions.substring(1);
             String b = answerOptions.substring(0, answerOptions.indexOf("\n"));
-            String b1 = b.substring(3);
+            String b1 = b.substring(3); //answer option B without "B. "
             answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
             answerOptions = answerOptions.substring(1);
             String c = answerOptions.substring(0, answerOptions.indexOf("\n"));
-            String c1 = c.substring(3);
+            String c1 = c.substring(3);  //answer option C without "C. "
             answerOptions = answerOptions.substring(answerOptions.indexOf("\n"));
             answerOptions = answerOptions.substring(1);
             String d = answerOptions.substring(0, answerOptions.indexOf("\n"));
-            String d1 = d.substring(3);
-            ArrayList<String> answerHolder = new ArrayList<>();
+            String d1 = d.substring(3);  //answer option D without "D. "
+            ArrayList<String> answerHolder = new ArrayList<>(); //holds answer options
             answerHolder.add(a1);
             answerHolder.add(b1);
             answerHolder.add(c1);
             answerHolder.add(d1);
-            Collections.shuffle(answerHolder);
+            Collections.shuffle(answerHolder); //shuffles answer options
             String answerI = "";
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 4; j++) { //attaches an "A. ", "B. ", "C. ", or "D. " in front of answer option
                 if (j == 0) {
                     answerI += ("\n" + "A. " + answerHolder.get(j));
                 } else if (j == 1) {
@@ -371,12 +371,12 @@ public class Student {
             }
 
             String total = q + answerI;
-            newQuestions.add(total);
+            newQuestions.add(total);  //string of answer options
         }
-        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-        bw.write(shuffleStatus);
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename)); //new buffered writer to write back to quiz file
+        bw.write(shuffleStatus); //writes "True" at top of file
         bw.write("\n");
-        for (int k = 0; k < newQuestions.size(); k++) {
+        for (int k = 0; k < newQuestions.size(); k++) { //writes full shuffled quiz back to file
              if (k < newQuestions.size() - 1) {
                  bw.write(newQuestions.get(k));
                  bw.write("\n");
@@ -386,4 +386,4 @@ public class Student {
         }
         bw.close();
     }
-
+}
