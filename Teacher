@@ -15,7 +15,7 @@ public class Teacher {
 
     public Teacher(String name/*, String[] courses*/) {
         this.name = name;
-        this.courses = courses;
+        //this.courses = courses;
         this.passWord = passWord;
         File f = new File(name + "_Courses");
         try {
@@ -54,6 +54,7 @@ public class Teacher {
             f2.createNewFile();
             pw.println(courseName);
             pw.close();
+            System.out.println("Course added successfully");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -121,26 +122,25 @@ public class Teacher {
 
 
         System.out.println("What is the course this quiz is for?");
-        courseName = scan.next();
+        String temp = scan.next();
+        courseName = temp + scan.nextLine();
         //Check if this course exists
-        for (int i = 0; i < course.size(); i++) {
-            if (course.equals(courses[i])) {
-                contains = 1;
-            }
+        if(course.indexOf(courseName) > -1) {
+            contains = 1;
         }
         if (contains == 0) {
             do {
                 System.out.println("This course does not exist. Please enter another course");
-                courseName = scan.next();
-                for (int i = 0; i < courses.length; i++) {
-                    if (course.equals(courses[i])) {
-                        contains = 1;
-                    }
+                temp = scan.next();
+                courseName = temp + scan.nextLine();
+                if(course.indexOf(courseName) > -1) {
+                    contains = 1;
                 }
             } while (contains == 0);
         }
         System.out.println("What is the name of the quiz?");
-        quizName = scan.next();
+        temp = scan.next();
+        quizName = temp + scan.nextLine();
         File courseQuiz = new File(name + "_" + course + "_Quizzes");
         PrintWriter pw3 = null;
         try {
@@ -149,61 +149,105 @@ public class Teacher {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("Do you want the quiz to be randomized? Y/N");
-        if(scan.next().equals("Y")) {
-            randomized = true;
-        }
+        System.out.println("Do you want to create a quiz or import a quiz?\n1: Create\n2: Import");
+        int imported = scan.nextInt();
+        if(imported == 2) {
+            System.out.println("What is the filepath of the quiz?");
+            temp = scan.next();
+            String filePath = temp + scan.nextLine();
+            File f = new File(filePath);
+            if(!f.exists()) {
+                do{
+                    System.out.println("That file does not exist. Please enter a new file or press N to exit");
+                    temp = scan.next();
+                    filePath = temp + scan.nextLine();
+                    f = new File(filePath);
+                    if(filePath.equals("N")) {
+                        return;
+                    }
+                } while(!f.exists());
+            }
+            try {
+                ArrayList<String> importList = new ArrayList<>();
+                BufferedReader bfr = new BufferedReader(new FileReader(f));
+                String line = bfr.readLine();
+                while(line != null) {
+                    importList.add(line);
+                    line = bfr.readLine();
+                }
+                File f2 = new File(name + "_" + quizName);
+                f.createNewFile();
+                PrintWriter pw4 = new PrintWriter(new FileOutputStream(f2));
+                for(int i = 0; i < importList.size(); i++) {
+                    pw4.println(importList.get(i));
+                }
+                System.out.println("The quiz has been created");
+                pw4.close();
+                bfr.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
 
-        try {
-            File f = new File(name + "_" + quizName);
-            pw = new PrintWriter(new FileOutputStream(f));
+            System.out.println("Do you want the quiz to be randomized? Y/N");
+            if (scan.next().equals("Y")) {
+                randomized = true;
+            }
 
 
-        } catch (FileNotFoundException e) {
-            //Input Validation
-        }
-        int count = 1;
-        int choice = 1;
-        int question;
+            try {
+                File f = new File(name + "_" + quizName);
+                pw = new PrintWriter(new FileOutputStream(f));
 
-        System.out.println("Do you want to add a question?");
-        System.out.println("1.Yes");
-        System.out.println("2.No");
-        choice = scan.nextInt();
-        pw.println(randomized);
-        while (choice == 1) {
 
-            System.out.println("Please type question " + count);
-            scan.nextLine();
-            String givenQuestion = scan.next();
-            System.out.println("Please type answer option A");
-            String answerA = scan.next();
-            System.out.println("Please type answer option B");
-            scan.nextLine();
-            String answerB = scan.next();
-            System.out.println("Please type answer option C");
-            String answerC = scan.next();
-            System.out.println("Please type answer option D");
-            String answerD = scan.next();
-            count = count + 1;
+            } catch (FileNotFoundException e) {
+                //Input Validation
+            }
+            int count = 1;
+            int choice = 1;
+            int question;
 
-            pw.println(givenQuestion);
-            pw.println(answerA);
-            pw.println(answerB);
-            pw.println(answerC);
-            pw.println(answerD);
             System.out.println("Do you want to add a question?");
             System.out.println("1.Yes");
             System.out.println("2.No");
             choice = scan.nextInt();
+            pw.println(randomized);
+            while (choice == 1) {
+
+                System.out.println("Please type question " + count);
+                scan.nextLine();
+                String givenQuestion = scan.next();
+                System.out.println("Please type answer option A");
+                String answerA = scan.next();
+                System.out.println("Please type answer option B");
+                scan.nextLine();
+                String answerB = scan.next();
+                System.out.println("Please type answer option C");
+                String answerC = scan.next();
+                System.out.println("Please type answer option D");
+                String answerD = scan.next();
+                count = count + 1;
+
+                pw.println(givenQuestion);
+                pw.println(answerA);
+                pw.println(answerB);
+                pw.println(answerC);
+                pw.println(answerD);
+                System.out.println("Do you want to add a question?");
+                System.out.println("1.Yes");
+                System.out.println("2.No");
+                choice = scan.nextInt();
 
 
+            }
+
+            System.out.println("The quiz is completed");
+
+            pw.close();
+            pw3.close();
         }
-
-        System.out.println("The quiz is completed");
-
-        pw.close();
-        pw3.close();
     }
 
     public void editQuiz() {
@@ -477,9 +521,9 @@ public class Teacher {
                 System.out.println("4. Grade Quiz\n5. View Student Submission\n6. Create Course\n7. Delete Course");
                 System.out.println("8. Exit");
                 try {
-                    choice = scan.nextInt();
+                    choice = Integer.parseInt(scan.next());
                 }
-                catch(InputMismatchException e) {
+                catch(NumberFormatException e) {
                     choice = 0;
                 }
                 if (choice < 1 || choice > 8) {
