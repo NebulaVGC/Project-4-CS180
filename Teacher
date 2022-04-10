@@ -34,7 +34,7 @@ public class Teacher {
         try {
             File f1 = new File(name + "_Courses.txt");
             PrintWriter pw = new PrintWriter(new FileOutputStream(f1, true));
-            File f2 = new File(name + "_" + courseName + "_Quizzes.txt");
+            File f2 = new File(name + "_" + courseName + ".txt");
             f2.createNewFile();
             pw.println(courseName);
             pw.close();
@@ -87,7 +87,7 @@ public class Teacher {
             e.printStackTrace();
         }
 
-            File f1 = new File(name + "_" + courseName + "_Quizzes.txt");
+            File f1 = new File(name + "_" + courseName + ".txt");
         if(f1.delete()) {
             System.out.println("Course deleted successfully!");
         } else {
@@ -124,7 +124,7 @@ public class Teacher {
         System.out.println("What is the name of the quiz?");
         temp = scan.next();
         quizName = temp + scan.nextLine();
-        File courseQuiz = new File(name + "_" + courseName + "_Quizzes.txt");
+        File courseQuiz = new File(name + "_" + courseName + ".txt");
         PrintWriter pw3 = null;
         try {
             pw3 = new PrintWriter(new FileOutputStream(courseQuiz, true));
@@ -255,15 +255,18 @@ public class Teacher {
         // Edit the specific lines of the array list that corrospondto the question that is being editied. set these edited lines to the arraylist
         // print the new arraylist to the file and save it
         ArrayList<String> list = new ArrayList<>();
+        String temp;
+        String courseName;
+        do{
         System.out.println("Enter the course the quiz is in or press N to exit");
-        String temp = scan.next();
-        String courseName = temp + scan.nextLine();
+        temp = scan.next();
+        courseName = temp + scan.nextLine();
         if(courseName.equals("N")) {
             return;
         }
-        do {
+
             if(course.indexOf(courseName) < 0) {
-                System.out.println("That course does not exist. Enter another course or press N to exit");
+                System.out.println("That course does not exist.");
                 temp = scan.next();
                 courseName = temp + scan.nextLine();
                 if(courseName.equals("N")) {
@@ -279,7 +282,8 @@ public class Teacher {
             f2 = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if(!f2.exists()) {
                 System.out.println("That quiz does not exist. Enter another quiz or press N to exit");
-                quizName = scan.nextLine();
+                temp = scan.next();
+                quizName = temp + scan.nextLine();
                 f2 = new File(name + "_" + courseName + "_" + quizName);
             }
             if(quizName.equals("N")){
@@ -324,7 +328,6 @@ public class Teacher {
     }
 
     public void deleteQuiz() {
-        Scanner scan = new Scanner(System.in);
         String courseName;
         do {
             System.out.println("Enter the course the quiz is in or press N to exit");
@@ -457,27 +460,35 @@ public class Teacher {
             String student;
             String courseName;
             String quizName;
+            String temp;
             int numCorrect = 0;
             int totalQuestions;
             System.out.println("Enter the name of the student you would like to grade");
-            student = scan.next();
+            temp = scan.next();
+            student = temp + scan.nextLine();
             System.out.println("Enter the quiz course");
-            courseName = scan.next();
+            temp = scan.next();
+            courseName = temp + scan.nextLine();
             System.out.println("Enter the name of the quiz");
-            quizName = scan.next();
-            File studentQuiz = new File(student + "_" + name + "_" + courseName + "_" + quizName);
+            temp = scan.next();
+            quizName = temp + scan.nextLine();
+            File studentQuiz = new File(student + "_" + name + "_" + courseName + "_" + quizName + ".txt");
             if (!studentQuiz.exists()) {
                 System.out.println("This quiz does not exist");
 
 
             } else {
-                File teacherQuiz = new File(name + "_" + quizName);
+                File teacherQuiz = new File(name + "_" + courseName + "_" + quizName + ".txt");
                 try {
                     BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));
                     BufferedReader bfrAnswers = new BufferedReader(new FileReader(studentQuiz));
                     ArrayList<String> entireFile = new ArrayList<>();
                     ArrayList<String> correct = new ArrayList<>();
                     String questionLine = bfrQuestions.readLine();
+                    if(!questionLine.equals("true") && !questionLine.equals("false")) {
+                        System.out.println("This quiz has already been graded");
+                        return;
+                    }
                     questionLine = bfrQuestions.readLine();
                     String answerLine = bfrAnswers.readLine();
                     while(!answerLine.equals("A") && !answerLine.equals("B") && !answerLine.equals("C") && !answerLine.equals("D")){
@@ -498,7 +509,8 @@ public class Teacher {
                         String yesNo = null;
                         do {
                             System.out.println("Is this correct? Y/N");
-                            yesNo = scan.next();
+                            temp = scan.next();
+                            yesNo = temp + scan.nextLine();
                             if(!yesNo.equals("Y") && !yesNo.equals("N")) {
                                 System.out.println("Try again");
                             }
@@ -554,11 +566,6 @@ public class Teacher {
             teacher.teacherInterface();*/
             Teacher teacher = new Teacher("Teacher");
             teacher.teacherInterface();
-
-
-
-
-
         }
 
         public void teacherInterface() {
