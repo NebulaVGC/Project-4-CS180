@@ -6,10 +6,13 @@ public class Student {
     Scanner scan = new Scanner(System.in);
     private String userName;
 
-    public Student(String userName) {
+    public Student(String userName) { //creates a new student obj with the username from login
         this.userName = userName;
     }
 
+    /*
+    method that runs the quiz and gives the user an option to attach a file to the quiz
+     */
     public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(quizName));
         File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
@@ -27,7 +30,7 @@ public class Student {
         String secondLine;
         String thirdLine;
         String fourthLine;
-        while ((nextLine = br.readLine()) != null) {
+        while ((nextLine = br.readLine()) != null) { //reads line until null
             firstLine = br.readLine();
             secondLine = br.readLine();
             thirdLine = br.readLine();
@@ -41,7 +44,7 @@ public class Student {
         }
         br.close();
         System.out.println("Would you like to attach a file with answers or answer in the quiz?");
-        System.out.println("1. attach a file\n2. answer in the quiz");
+        System.out.println("1. attach a file\n2. answer in the quiz"); //gives student the choice to attach a file
         while (loop == 0) {
             String option = scan.nextLine();
             if (option.equals("1")) {
@@ -59,19 +62,22 @@ public class Student {
                 }
                 loop++;
             } else {
-                System.out.println("Invalid Input: Try Again");
+                System.out.println("Invalid Input: Try Again"); //input validation
             }
         }
         System.out.println("Thanks for taking the quiz!");
-        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime()); //timestamp
         totalCopy = shuffleStatus + "\n" + copyQuiz + userName + "\n" + totalCopy + timeStamp;
-        bw.write(totalCopy);
+        bw.write(totalCopy); //writes to a file for the teacher to grade
         bw.close();
 
     }
 
+    /*
+    method that returns the course the student picks 
+     */
     public String pickCourse(String filename) {
-        String courseName = null;
+        String courseName = null; //the coursename
         try {
             File course = new File(filename);
             FileReader frcourse = new FileReader(course);
@@ -87,14 +93,14 @@ public class Student {
                 String line = bfrCourse.readLine();
                 int counter = 0;
                 System.out.println("Course Options:");
-                while (line != null) {
+                while (line != null) { //prints out each course option
                     counter++;
                     System.out.println(counter + ". " + line);
                     line = bfrCourse.readLine();
                 }
                 System.out.println((counter + 1) + ". Exit");
-                int courseSelector = 0;
-                do {
+                int courseSelector = 0; //the option the user chooses
+                do { //input validation 
                     System.out.println("Please select which course you would like to take?");
                     courseSelector = scan.nextInt();
                     scan.nextLine();
@@ -120,6 +126,10 @@ public class Student {
         return courseName;
     }
 
+    /*
+    method that allows the student to choose which quiz to take. If they have already taken the quiz, it
+    will say already taken and give them the option to see their grades and response for each answer
+     */
     public String pickQuiz(String filename) {
         String courseName = null;
         try {
@@ -127,7 +137,7 @@ public class Student {
             FileReader frcourse = new FileReader(course);
             BufferedReader bfrCourse = new BufferedReader(frcourse);
             BufferedReader br = new BufferedReader(new FileReader(filename));
-            courseName = "";
+            courseName = ""; //name of course
             if (br.readLine() == null) {
                 courseName = "empty";
                 br.close();
@@ -143,7 +153,7 @@ public class Student {
                 }
                 System.out.println((counter + 1) + ". Exit");
                 int courseSelector = 0;
-                do {
+                do { //input validation
                     System.out.println("Please select which quiz you would like to take?");
                     courseSelector = scan.nextInt();
                     scan.nextLine();
@@ -387,12 +397,12 @@ public class Student {
         bw.write(shuffleStatus); //writes "True" at top of file
         bw.write("\n");
         for (int k = 0; k < newQuestions.size(); k++) { //writes full shuffled quiz back to file
-             if (k < newQuestions.size() - 1) {
-                 bw.write(newQuestions.get(k));
-                 bw.write("\n");
-             } else {
-                 bw.write(newQuestions.get(k));
-             }
+            if (k < newQuestions.size() - 1) {
+                bw.write(newQuestions.get(k));
+                bw.write("\n");
+            } else {
+                bw.write(newQuestions.get(k));
+            }
         }
         bw.close();
     }
