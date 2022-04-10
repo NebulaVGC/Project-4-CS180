@@ -158,7 +158,7 @@ public class Teacher {
                     importList.add(line);
                     line = bfr.readLine();
                 }
-                File f2 = new File(name + "_" + quizName + ".txt");
+                File f2 = new File(name + "_" + courseName + "_" + quizName + ".txt");
                 f.createNewFile();
                 PrintWriter pw4 = new PrintWriter(new FileOutputStream(f2));
                 for(int i = 0; i < importList.size(); i++) {
@@ -181,9 +181,9 @@ public class Teacher {
 
 
             try {
-                File f = new File(name + "_" + quizName + ".txt");
+                File f = new File(name + "_" + courseName + "_" + quizName + ".txt");
                 pw = new PrintWriter(new FileOutputStream(f));
-                File f2 = new File(name + "_" + quizName + "_correctAnswers.txt");
+                File f2 = new File(name + "_" + courseName + "_" + quizName + "_correctAnswers.txt");
                 pw2 = new PrintWriter(new FileOutputStream(f2));
 
 
@@ -212,6 +212,7 @@ public class Teacher {
                 System.out.println("Please type answer option C");
                 temp = scan.next();
                 String answerC = temp + scan.nextLine();
+                System.out.println("Please type answer option D");
                 temp = scan.next();
                 String answerD = temp + scan.nextLine();
                 String correctAnswer;
@@ -275,11 +276,11 @@ public class Teacher {
         String quizName = temp + scan.nextLine();
         File f2;
         do {
-            f2 = new File(name + "_" + quizName + ".txt");
+            f2 = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if(!f2.exists()) {
                 System.out.println("That quiz does not exist. Enter another quiz or press N to exit");
                 quizName = scan.nextLine();
-                f2 = new File(name + "_" + quizName);
+                f2 = new File(name + "_" + courseName + "_" + quizName);
             }
             if(quizName.equals("N")){
                 return;
@@ -332,7 +333,7 @@ public class Teacher {
             if (courseName.equals("N")) {
                 return;
             } else if (course.indexOf(courseName) < 0) {
-                System.out.println("That course does not exist");
+                System.out.print("That course does not exist. ");
             }
         } while(course.indexOf(courseName) < 0);
         File file;
@@ -340,7 +341,7 @@ public class Teacher {
             System.out.println("Enter the name of the quiz you want to delete or press N to exit");
             String temp = scan.next();
             String quizName = temp + scan.nextLine();
-            file = new File(name + "_" + quizName + ".txt");
+            file = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if(quizName.equals("N")) {
                 return;
             } else if(!file.exists()) {
