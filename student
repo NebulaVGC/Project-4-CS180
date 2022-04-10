@@ -4,24 +4,30 @@ import java.util.*;
 
 public class Student {
     Scanner scan = new Scanner(System.in);
-    private String userName;
+    private String userName; //STORES THE STUDENTS USERNAME
 
+    //CONSTRUCTS A NEW STUDENT OBJ FROM USERNAME STORED FROM LOGIN
     public Student(String userName) {
         this.userName = userName;
     }
 
+    /*
+    this method runs the quiz on the terminal, displaying the questions numbered as well as giving them
+    the option to attach a file or submit answers on the terminal. There is input validation incase they enter
+    something they are not prompted to.
+     */
     public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(quizName));
         File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         String nextLine = "";
-        String shuffleStatus = br.readLine();
+        String shuffleStatus = br.readLine(); //reads the first line of whether or not it will shuffle
         String copy = "";
         String totalCopy = "";
         String importedFile = "";
         String copyQuiz = "";
-        int counter = 0;
-        int loop = 0;
+        int counter = 0; //counts number of lines
+        int loop = 0; //used for input validation
         int number = 1;
         String firstLine;
         String secondLine;
@@ -63,13 +69,18 @@ public class Student {
             }
         }
         System.out.println("Thanks for taking the quiz!");
-        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime()); //creates a timestamp when they submit for teacher to see
         totalCopy = shuffleStatus + "\n" + copyQuiz + userName + "\n" + totalCopy + timeStamp;
-        bw.write(totalCopy);
+        bw.write(totalCopy); //writes the whole quiz to a file so the teacher can see
         bw.close();
 
     }
 
+    /*
+    Where the student will pick courses from their corresponding teacher. Reads from a file that has all of the teachers
+    courses in it. Students are given the exit option as well. Once they select an available course from a teacher, it will
+    show all the quizzes in that course.
+     */
     public String pickCourse(String filename) {
         String courseName = null;
         try {
@@ -87,17 +98,17 @@ public class Student {
                 String line = bfrCourse.readLine();
                 int counter = 0;
                 System.out.println("Course Options:");
-                while (line != null) {
+                while (line != null) { //where courses are listed on terminal
                     counter++;
                     System.out.println(counter + ". " + line);
                     line = bfrCourse.readLine();
                 }
-                System.out.println((counter + 1) + ". Exit");
+                System.out.println((counter + 1) + ". Exit"); //final option, which is to exit
                 int courseSelector = 0;
-                do {
+                do { //input validation, if they enter an invalid option
                     System.out.println("Please select which course you would like to take?");
-                    courseSelector = scan.nextInt();
-                    scan.nextLine();
+                    courseSelector = scan.nextInt(); //stores which option they pick
+                    scan.nextLine(); //clears next line for scanner
                     if (courseSelector <= 0 || courseSelector > counter + 1) {
                         System.out.println("Please enter a valid course id!");
                     }
@@ -110,6 +121,7 @@ public class Student {
                     for (int i = 0; i < courseSelector; i++) {
                         courseName = bfr.readLine();
                     }
+                    //close all streams
                     bfr.close();
                     bfrCourse.close();
                 }
@@ -117,8 +129,13 @@ public class Student {
         } catch (IOException io) {
             io.printStackTrace();
         }
-        return courseName;
+        return courseName; //returns the name of course the user selected
     }
+    /*
+    shows the student all the quizzes that have been written for a teacher in that course. Students only
+    get one attempt. If they click on a quiz that they already took, they can either check their grade or go back
+    to see a different quiz.
+     */
 
     public String pickQuiz(String filename) {
         String courseName = null;
@@ -134,16 +151,16 @@ public class Student {
             } else {
                 br.close();
                 String line = bfrCourse.readLine();
-                int counter = 0;
+                int counter = 0; //used to print the number in front of each quiz
                 System.out.println("Quiz Options:");
-                while (line != null) {
+                while (line != null) { //shows all available quiz options
                     counter++;
                     System.out.println(counter + ". " + line);
                     line = bfrCourse.readLine();
                 }
                 System.out.println((counter + 1) + ". Exit");
                 int courseSelector = 0;
-                do {
+                do { //input validation
                     System.out.println("Please select which quiz you would like to take?");
                     courseSelector = scan.nextInt();
                     scan.nextLine();
@@ -160,6 +177,7 @@ public class Student {
                     for (int i = 0; i < courseSelector; i++) {
                         courseName = bfr.readLine();
                     }
+                    //close all streams
                     bfr.close();
                     bfrCourse.close();
                 }
