@@ -21,7 +21,8 @@ public class Student {
     /*
     method that runs the quiz and gives the user an option to attach a file to the quiz
      */
-    public void runQuiz(String quizName, String username, String teacherName, String courseName, String plainQuizName, Scanner scan)
+    public void runQuiz(String quizName, String username, String teacherName, String courseName, String plainQuizName,
+                        Scanner scan)
             throws IOException {
         this.scan = scan;
         BufferedReader br = new BufferedReader(new FileReader(quizName));
@@ -272,7 +273,8 @@ public class Student {
                         BufferedReader bufferedReader2 = new BufferedReader(fr);
                         String shuffleStatus = bufferedReader2.readLine(); //whether or not to shuffle the quiz
                         if (shuffleStatus.equalsIgnoreCase("True")) {
-                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt", scanner); //shuffles quiz
+                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt", scanner);
+                            //shuffles quiz
                         }
                         if (!new File(student.userName + "_" + teacher + "_"
                                 + course + "_" + quiz + ".txt").exists()) {
