@@ -27,6 +27,7 @@ public class RunLocalTest {
             }
         }
     }
+
     @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 
     public static class TestCase {
@@ -725,8 +726,10 @@ public class RunLocalTest {
                     expectedStudentPassword, StudentPassword);
         }
 
+
+        @Test (timeout = 1000)
         public void ITeacherCreateCourse() {
-            String input = "1\r\n2\r\nCloud9\r\n234567\r\n6\r\nMath\r\n8\r\n";
+            String input = "1\r\n2\r\nCloud9\r\n234567\r\n8\r\n";
 
             receiveInput(input);
 
@@ -768,12 +771,11 @@ public class RunLocalTest {
                     "6. Create Course\n" +
                     "7. Delete Course\n" +
                     "8. Exit\n" +
-                    "Goodbye!";
+                    "Goodbye!\n";
             assertEquals("Ensure your Main.java output contains the correct information!", expectedFull, out);
-
         }
 
-        public void JTeacherCreateQuiz() {
+        public void JStudentLogin() {
 
             String input = "2\r\n2\r\nKevin\r\n234567\r\nFrank\r\n";
 
@@ -797,7 +799,8 @@ public class RunLocalTest {
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
                     "Please enter your password\n" +
-                    "What is the username of your teacher?\n";
+                    "What is the username of your teacher?\n" +
+                    "Your teacher has not created any courses\n";
 
             assertEquals("Ensure your Main.java output contains the correct information!", expectedFull, out);
         }
