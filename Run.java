@@ -1,6 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+/**
+ * Project 04 -- Run
+ * <p>
+ * This class prompts user to sign in as teacher or student
+ *
+ * @author Tim Chou L09
+ * @version April 11, 2022
+ */
 
 public class Run {
     //Initiates string prompts
