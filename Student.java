@@ -21,8 +21,9 @@ public class Student {
     /*
     method that runs the quiz and gives the user an option to attach a file to the quiz
      */
-    public void runQuiz(String quizName, String username, String teacherName, String courseName, String plainQuizName)
+    public void runQuiz(String quizName, String username, String teacherName, String courseName, String plainQuizName, Scanner scan)
             throws IOException {
+        this.scan = scan;
         BufferedReader br = new BufferedReader(new FileReader(quizName));
         File f = new File(username + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
@@ -87,7 +88,8 @@ public class Student {
     /*
     method that returns the course the student picks
      */
-    public String pickCourse(String filename) {
+    public String pickCourse(String filename, Scanner scan) {
+        this.scan = scan;
         String courseName = null; //the coursename
         try {
             File course = new File(filename);
@@ -141,7 +143,8 @@ public class Student {
     method that allows the student to choose which quiz to take. If they have already taken the quiz, it
     will say already taken and give them the option to see their grades and response for each answer
      */
-    public String pickQuiz(String filename) {
+    public String pickQuiz(String filename, Scanner scan) {
+        this.scan = scan;
         String courseName = null;
         try {
             File course = new File(filename);
@@ -225,7 +228,7 @@ public class Student {
             int loop = 0; //initiates looping variable
 
             do {
-                String course = student.pickCourse(teacher + "_Courses.txt");
+                String course = student.pickCourse(teacher + "_Courses.txt", scanner);
                 //runs method to have student pick a course
                 if (course.equals("end")) {  //breaks out of loops is "end" is returned for pickCourse method
                     break;
@@ -245,7 +248,7 @@ public class Student {
                         }
                     }
                 } else {
-                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt");
+                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt", scanner);
                     //runs method to have student pick a quiz
                     System.out.println(quiz);
                     if (quiz.equals("end")) {
@@ -269,13 +272,13 @@ public class Student {
                         BufferedReader bufferedReader2 = new BufferedReader(fr);
                         String shuffleStatus = bufferedReader2.readLine(); //whether or not to shuffle the quiz
                         if (shuffleStatus.equalsIgnoreCase("True")) {
-                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt"); //shuffles quiz
+                            student.shuffle(teacher + "_" + course + "_" + quiz + ".txt", scanner); //shuffles quiz
                         }
                         if (!new File(student.userName + "_" + teacher + "_"
                                 + course + "_" + quiz + ".txt").exists()) {
                             //checks if quiz has already been taken. if not then runs the quiz
                             student.runQuiz(teacher + "_" + course + "_" + quiz + ".txt",
-                                    student.userName, teacher, course, quiz);
+                                    student.userName, teacher, course, quiz, scanner);
                         } else {
                             System.out.println("Quiz already taken");
                             int optionLoop = 0;
@@ -335,7 +338,8 @@ public class Student {
 
     }
 
-    public void shuffle(String filename) throws IOException {
+    public void shuffle(String filename, Scanner scan) throws IOException {
+        this.scan = scan;
         //Shuffles the question order and the answer order of the quiz file
         ArrayList<String> questions = new ArrayList<>();   //array that stores full questions with answers attached
         File f = new File(filename);
