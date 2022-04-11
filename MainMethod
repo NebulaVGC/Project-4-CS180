@@ -2,11 +2,11 @@ public class MainMethod extends Run {
     public static void main(String[] args) {
         String Username = runQuiz();
         String[] splited = Username.split(" ");
-        if (Username.equals("")) {
-            return;
+        if (splited[0].equals("Teacher")) {
+            Teacher teacher = new Teacher(splited[1]);
+            teacher.teacherInterface();
         } else if (splited[0].equals("Student")) {
-            Username = Username.substring(8);
-            Student student = new Student(Username);
+            Student student = new Student(splited[1]);
             student.mainStudent();
         }
     }
