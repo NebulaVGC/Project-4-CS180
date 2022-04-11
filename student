@@ -74,7 +74,7 @@ public class Student {
     }
 
     /*
-    method that returns the course the student picks 
+    method that returns the course the student picks
      */
     public String pickCourse(String filename) {
         String courseName = null; //the coursename
@@ -100,7 +100,7 @@ public class Student {
                 }
                 System.out.println((counter + 1) + ". Exit");
                 int courseSelector = 0; //the option the user chooses
-                do { //input validation 
+                do { //input validation
                     System.out.println("Please select which course you would like to take?");
                     courseSelector = scan.nextInt();
                     scan.nextLine();
@@ -329,10 +329,10 @@ public class Student {
         int lineNum = 1;
         int mult = 0;
         br.readLine();
-        while(line != null){
+        while (line != null) {
             line = br.readLine();
             ++lineNum;
-            if(lineNum == ( 2 + 5 * mult) && mult <= numq && line != null){
+            if (lineNum == (2 + 5 * mult) && mult <= numq && line != null) {
                 mult++;
                 String q = "";
                 String ans = "";
