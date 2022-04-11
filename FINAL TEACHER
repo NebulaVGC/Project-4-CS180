@@ -92,7 +92,7 @@ public class Teacher {
             }
             BufferedReader bfr2 = new BufferedReader(new FileReader(f1));
             line = bfr2.readLine();
-            while(line != null) {
+            while (line != null) {
                 File quizFile = new File(name + "_" + courseName + "_" + line + ".txt");
                 quizFile.delete();
                 File answerFIle = new File(name + "_" + courseName + "_" + line + "_correctAnswers.txt");
@@ -357,8 +357,7 @@ public class Teacher {
             f2 = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if (quizName.equals("N")) {
                 return;
-            }
-            else if (!f2.exists()) {
+            } else if (!f2.exists()) {
                 System.out.println("That quiz does not exist. Enter another quiz or press N to exit");
                 temp = scan.next();
                 quizName = temp + scan.nextLine();
@@ -591,40 +590,6 @@ public class Teacher {
             e.printStackTrace();
         }
     }
-
-    /*public void automaticGrade() {
-        String student;
-        String course;
-        String quizName;
-        int numCorrect;
-        int totalQuestions;
-        System.out.println("Enter the name of the student you would like to view");
-        student = scan.next();
-        System.out.println("Enter the quiz course");
-        course = scan.next();
-        System.out.println("Enter the name of the quiz");
-        quizName = scan.next();
-        File studentQuiz = new File(student + "_" + name + "_" + course + "_" + quizName);
-        if (!studentQuiz.exists()) {
-            System.out.println("This quiz does not exist");
-
-        } else {
-            File teacherQuiz = new File(name + "_" + quizName);
-            try {
-                BufferedReader bfr1 = new BufferedReader(new FileReader(studentQuiz));
-                BufferedReader bfr2 = new BufferedReader(new FileReader(teacherQuiz));
-                String line1 = bfr1.readLine();
-                String line2 = bfr2.readLine();
-                while (line2 != null) {
-                    bfr1.
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     /**
      * Allows the teacher to manually grade a students quiz
