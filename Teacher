@@ -435,7 +435,8 @@ public class Teacher {
                         }
                     } catch (NumberFormatException e) {
                         System.out.println("Not an option");
-                        System.out.println("Enter the number of the line you would like to edit, press Y to add more questions, or press N to exit");
+                        System.out.println("Enter the number of the line you would like to edit, press Y to " +
+                                "add more questions, or press N to exit");
                         temp = scan.next();
                         lineNumber = temp + scan.nextLine();
                         newLineNumber = 0;
@@ -671,7 +672,7 @@ public class Teacher {
             System.out.println("This quiz does not exist");
         } else {
             try {
-                BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for 
+                BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for
                 //the student quiz and reading the questions
                 BufferedReader bfrAnswers = new BufferedReader(new FileReader(studentQuiz));    //Buffered reader for
                 //the student quiz and reading the answer
@@ -681,10 +682,12 @@ public class Teacher {
                 if (questionLine.equals("true") || questionLine.equals("false")) {
                     questionLine = bfrQuestions.readLine();
                     String answerLine = bfrAnswers.readLine();  //Reads the next line in the answer buffered reader
-                    while (!answerLine.equals("A") && !answerLine.equals("B") && !answerLine.equals("C") && !answerLine.equals("D")) {
+                    while (!answerLine.equals("A") && !answerLine.equals("B") && !answerLine.equals("C") &&
+                            !answerLine.equals("D")) {
                         answerLine = bfrAnswers.readLine();
                     }
-                    while (answerLine.equals("A") || answerLine.equals("B") || answerLine.equals("C") || answerLine.equals("D")) {
+                    while (answerLine.equals("A") || answerLine.equals("B") || answerLine.equals("C")
+                            || answerLine.equals("D")) {
                         System.out.println(questionLine);
                         questionLine = bfrQuestions.readLine();
                         System.out.println(questionLine);
@@ -711,7 +714,7 @@ public class Teacher {
                         questionLine = bfrQuestions.readLine();
                     }
 
-                    BufferedReader bfr3 = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for the 
+                    BufferedReader bfr3 = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for the
                     //student quiz
                     String line = bfr3.readLine();  //Reads the next line in the buffered reader
                     line = bfr3.readLine();
@@ -720,7 +723,7 @@ public class Teacher {
                         line = bfr3.readLine();
                     }
                     double percentage = (double) numCorrect / correct.size() * 100;     //Holds the grade percentage
-                    PrintWriter pw = new PrintWriter(new FileOutputStream(studentQuiz));    //Print writer for the 
+                    PrintWriter pw = new PrintWriter(new FileOutputStream(studentQuiz));    //Print writer for the
                     //student quiz
                     int j = 0;  //Counter for the answers
                     for (int i = 0; i < entireFile.size(); i++) {
@@ -767,7 +770,7 @@ public class Teacher {
      * The interface the teacher sees when they login. They have 8 choices to choose from.
      */
     public void teacherInterface() {
-        int choice = 0; //The teachers input 
+        int choice = 0; //The teachers input
         while (choice != 8) {
 
             do {
@@ -777,7 +780,7 @@ public class Teacher {
                 System.out.println("4. Grade Quiz\n5. View Student Submission\n6. Create Course\n7. Delete Course");
                 System.out.println("8. Exit");
                 try {
-                    String temp = scan.next();  //Helps fix scanner issues  
+                    String temp = scan.next();  //Helps fix scanner issues
                     String stringChoice = temp + scan.nextLine();   //Determines what the teacher wants to do
                     choice = Integer.parseInt(stringChoice);
                 } catch (NumberFormatException e) {
