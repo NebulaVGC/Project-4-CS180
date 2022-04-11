@@ -19,6 +19,9 @@ public class Run {
     final static String USERNAMEEXIST = "This username already existed!";
     final static String USERNAMEDOESNOTEXIST = "This username does not existed!";
 
+    /*
+    method that runs the quiz and takes the scanner as a parameter
+     */
     public static String runQuiz(Scanner scanner) {
         int usernameStatus;
         int welcome = 0;
@@ -50,7 +53,7 @@ public class Run {
                     System.out.println(ACCOUNTPROMPT);
                     try {
                         accountChoice[0] = Integer.parseInt(scanner.nextLine());
-                        if (accountChoice[0] != 1 && accountChoice[0] != 2 && accountChoice[0] != 3) { 
+                        if (accountChoice[0] != 1 && accountChoice[0] != 2 && accountChoice[0] != 3) {
                             //throws error if account choice is invalid option
                             System.out.println(ERROR);
                         } else {
@@ -252,12 +255,12 @@ public class Run {
                     }
                 }
             }
-        } else if (loginType[0] == 2) {
+        } else if (loginType[0] == 2) { //student login
             while (login[0] == 0) {
                 account = 0;
                 usernameStatus = 0;
                 while (account == 0) {
-                    System.out.println(ACCOUNTPROMPT);
+                    System.out.println(ACCOUNTPROMPT); //prompts user
                     try {
                         accountChoice[0] = Integer.parseInt(scanner.nextLine());
                         if (accountChoice[0] != 1 && accountChoice[0] != 2 && accountChoice[0] != 3) {
@@ -269,8 +272,8 @@ public class Run {
                         e.printStackTrace();
                     }
                 }
-                if (accountChoice[0] == 1) {
-                    System.out.println(MAKEUSERNAME);
+                if (accountChoice[0] == 1) { //makes account for either student or teacher
+                    System.out.println(MAKEUSERNAME); //prompts user
                     while (usernameStatus == 0) {
                         username1 = scanner.nextLine();
                         while (username1.contains(" ")) {
@@ -286,7 +289,7 @@ public class Run {
                             usernameStatus = 1;
 
                             while (line != null) {
-                                if (username1.equals(line)) {
+                                if (username1.equals(line)) { //catches if the username already exists
                                     System.out.println(USERNAMEEXIST);
                                     usernameStatus = 2;
                                     break;
@@ -318,7 +321,7 @@ public class Run {
                             e.printStackTrace();
                         }
                     }
-                } else if (accountChoice[0] == 2) {
+                } else if (accountChoice[0] == 2) { //create account depending on whether student or teacher
                     System.out.println(LOGINUSERNAME);
                     while (usernameStatus == 0) {
 
@@ -341,7 +344,7 @@ public class Run {
                                 line = bfr.readLine();
                             }
                             bfr.close();
-                            if (counter[0] == 0) {
+                            if (counter[0] == 0) { //when logging in, username doesn't exist
                                 System.out.println(USERNAMEDOESNOTEXIST);
                                 break;
                             } else {
@@ -359,7 +362,7 @@ public class Run {
                                 bfr2.close();
                                 if (passwordList.get(accountList.indexOf(username1)).equals(password)) {
                                     return "Student " + username1;
-                                } else {
+                                } else { //catches the wrong password for an account
                                     System.out.println(WRONGPASSWORD);
                                     break;
                                 }
@@ -368,7 +371,7 @@ public class Run {
                             e.printStackTrace();
                         }
                     }
-                } else if (accountChoice[0] == 3) {
+                } else if (accountChoice[0] == 3) { //change existing username
                     System.out.println(LOGINUSERNAME);
                     while (usernameStatus == 0) {
                         try {
@@ -390,7 +393,7 @@ public class Run {
                                 line = bfr.readLine();
                             }
                             bfr.close();
-                            if (counter[0] == 0) {
+                            if (counter[0] == 0) { //catches a username that doesn't exist
                                 System.out.println(USERNAMEDOESNOTEXIST);
                                 break;
                             } else {
@@ -408,7 +411,7 @@ public class Run {
                                 bfr2.close();
                                 if (passwordList.get(accountList.indexOf(username1)).equals(password)) {
                                     try {
-                                        System.out.println(EDITACCOUNT);
+                                        System.out.println(EDITACCOUNT); //prompts user to edit account
                                         int edit = Integer.parseInt(scanner.nextLine());
                                         if (edit == 1) {
                                             System.out.println(MAKEUSERNAME);
@@ -466,6 +469,9 @@ public class Run {
         return "";
 
     }
+    /*
+    method that checks the teacher and student account/passwords
+     */
     private static void checkFile() {
         File tAccount = new File("TeacherAccount.txt");
         try {
