@@ -1,4 +1,3 @@
-# Project-4
 Project 4: Learning management System (Online quiz)
 
 Kacey - Submitted Report
