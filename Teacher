@@ -4,13 +4,11 @@ import java.util.Scanner;
 
 /**
  * Project 04 -- Teacher
-
- * This class is the teacher object for the quiz making system.
+ * <p>
+ * This class is the teacher object for the quiz making and taking system.
  *
  * @author Chase Thompsion, Kacey Atkins L09
- *
  * @version March 8, 2022
- *
  */
 public class Teacher {
     private final String name;      //The teachers name
@@ -19,7 +17,7 @@ public class Teacher {
     /**
      * Constructor for Teacher. THe constructor creates a new empty file that is used to hold the courses
      *
-     *@param name The name of the teacher
+     * @param name The name of the teacher
      */
     public Teacher(String name) {
         this.name = name;
@@ -35,7 +33,6 @@ public class Teacher {
     /**
      * This method creates a course with a course name that the teacher enters. The name is then added to the courses
      * text file for that teacher.
-     *
      */
     public void createCourse() {
         System.out.println("Enter the name of the new course or press N to exit");
@@ -48,7 +45,7 @@ public class Teacher {
             File f1 = new File(name + "_Courses.txt");  //The courses file for the teacher
             PrintWriter pw = new PrintWriter(new FileOutputStream(f1, true));   //Printer writer for the f1
             File f2 = new File(name + "_" + courseName + ".txt");   //File that holds the quizzes for the
-                                                                             //given course
+            //given course
             f2.createNewFile();
             pw.println(courseName);
             pw.close();
@@ -60,10 +57,10 @@ public class Teacher {
         }
 
     }
+
     /**
      * Deletes a course that the teacher enters if it exists. The course is removed from the courses text file
      * that the teacher has and removes the file that holds the quizzes for the course
-     *
      */
     public void deleteCourse() {
         String courseName;      //The course to be deleted
@@ -93,7 +90,7 @@ public class Teacher {
                 }
             }
             PrintWriter pw = new PrintWriter(new FileOutputStream(f));  //Print writer that will go over the courses
-                                                                    //file and rewrite the file without the given course
+            //file and rewrite the file without the given course
             for (int i = 0; i < list.size(); i++) {
                 pw.println(list.get(i));
             }
@@ -193,8 +190,8 @@ public class Teacher {
             }
             try {
                 ArrayList<String> importList = new ArrayList<>();   //List to hold the lines within the import file
-                BufferedReader bfr = new BufferedReader(new FileReader(f));   //Buffered reader that reads the 
-                                                                            //import file
+                BufferedReader bfr = new BufferedReader(new FileReader(f));   //Buffered reader that reads the
+                //import file
                 String line = bfr.readLine();   //Reads the next line in the buffered reader
                 while (line != null) {
                     importList.add(line);
@@ -219,7 +216,7 @@ public class Teacher {
             do {
                 System.out.println("Do you want the quiz to be randomized? Press E to exit. Y/N");
                 temp = scan.next();
-                stringRandom = temp + scan.nextLine();  
+                stringRandom = temp + scan.nextLine();
 
                 if (stringRandom.equals("E")) {
                     return;
@@ -237,8 +234,8 @@ public class Teacher {
             try {
                 File f = new File(name + "_" + courseName + "_" + quizName + ".txt");   //File for the quiz
                 pw = new PrintWriter(new FileOutputStream(f));
-                File f2 = new File(name + "_" + courseName + "_" + quizName + "_correctAnswers.txt");  //File 
-                                                                        //for the answer sheet 
+                File f2 = new File(name + "_" + courseName + "_" + quizName + "_correctAnswers.txt");  //File
+                //for the answer sheet
                 pw2 = new PrintWriter(new FileOutputStream(f2));
 
 
@@ -314,9 +311,8 @@ public class Teacher {
     }
 
     /**
-     * Allows the user to edit the quiz by changing a certain line or adding more questions. If the true or false is 
+     * Allows the user to edit the quiz by changing a certain line or adding more questions. If the true or false is
      * removed from the top of the quiz, the quiz will be read as already being graded.
-     *
      */
     public void editQuiz() {
         ArrayList<String> list = new ArrayList<>(); //List to help print out the contents of the quiz
@@ -380,11 +376,11 @@ public class Teacher {
                     return;
                 } else if (lineNumber.equals("Y")) {
                     File answers = new File(name + "_" + courseName + "_" + quizName + "_correctAnswers.txt");
-                                //The correct answers file
-                    PrintWriter pw5 = new PrintWriter(new FileOutputStream(answers, true));     //The print 
-                                                                            //writer for the answer sheet
-                    PrintWriter pw2 = new PrintWriter(new FileOutputStream(f2, true));  //The print writer 
-                                                                                    //for the quiz file
+                    //The correct answers file
+                    PrintWriter pw5 = new PrintWriter(new FileOutputStream(answers, true));     //The print
+                    //writer for the answer sheet
+                    PrintWriter pw2 = new PrintWriter(new FileOutputStream(f2, true));  //The print writer
+                    //for the quiz file
                     int choice = 0; //Determine if the user would like to add anohter question
                     while (choice == 0) {
                         System.out.println("Please type the next question");
@@ -472,7 +468,6 @@ public class Teacher {
     /**
      * Deletes a quiz with the given course name and quiz name. The quiz is deleted from the course file that holds
      * the quizzes.
-     *
      */
     public void deleteQuiz() {
         String courseName;  //The course name for the quiz
@@ -488,11 +483,11 @@ public class Teacher {
                 System.out.print("That course does not exist. ");
             }
         } while (!courseFile.exists());
-        File file;
+        File file;  //File for the quiz
         do {
             System.out.println("Enter the name of the quiz you want to delete or press N to exit");
-            String temp = scan.next();
-            String quizName = temp + scan.nextLine();
+            String temp = scan.next();      //Helps fix scanner errors
+            String quizName = temp + scan.nextLine();   //The quiz name the teacher entered
             file = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if (quizName.equals("N")) {
                 return;
@@ -504,23 +499,28 @@ public class Teacher {
         System.out.println("File deleted successfully");
     }
 
+    /**
+     * Lets the teacher see the a certain students quiz submission. A student name, a course name, and a quiz name are
+     * needed
+     */
     public void viewStudentSubmission() {
-        String student;
-        String courseName;
-        String quizName;
-        String temp;
-        ArrayList<String> studentNames = new ArrayList<>();
-        File courseFile;
-        File studentFile = new File("StudentAccount.txt");
+        String student;     //The student whose submission will be viewed
+        String courseName;  //The course name
+        String quizName;    //The quiz name
+        String temp;    //Helps fix scanner errors
+        ArrayList<String> studentNames = new ArrayList<>(); //List that holds the current students names
+        File courseFile;    //The file for the course
+        File studentFile = new File("StudentAccount.txt");  //The file that holds the student names
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader(studentFile));
-            String line = bfr.readLine();
+            BufferedReader bfr = new BufferedReader(new FileReader(studentFile));   //Buffered reader for student file
+            String line = bfr.readLine();   //Reads the next line in the buffered reader
             while (line != null) {
                 studentNames.add(line);
                 line = bfr.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("No students have been added");
+            return;
         }
         do {
             System.out.println("Enter the name of the student you would like to view or press N to exit");
@@ -544,7 +544,7 @@ public class Teacher {
                 System.out.println("That course does not exist");
             }
         } while (!courseFile.exists());
-        File quizFile;
+        File quizFile;  //File for the quiz
         do {
             System.out.println("Enter the name of the quiz or press N to exit");
             temp = scan.next();
@@ -559,8 +559,8 @@ public class Teacher {
         } while (!quizFile.exists());
 
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader(quizFile));
-            String line = bfr.readLine();
+            BufferedReader bfr = new BufferedReader(new FileReader(quizFile)); //Buffered reader for the quiz file
+            String line = bfr.readLine();   //Reads the next line in the buffered reader
             while (line != null) {
                 System.out.println(line);
                 line = bfr.readLine();
@@ -607,19 +607,22 @@ public class Teacher {
         }
     }*/
 
+    /**
+     * Allows the teacher to manually grade a students quiz
+     */
+
     public void manualGrade() {
-        String student;
-        String courseName;
-        String quizName;
-        String temp;
-        int numCorrect = 0;
-        int totalQuestions;
-        ArrayList<String> studentNames = new ArrayList<>();
-        File courseFile;
-        File studentFile = new File("StudentAccount.txt");
+        String student; //The student whose quiz will be graded
+        String courseName;  //The course the quiz is in
+        String quizName;    //The quiz name
+        String temp;    //Used to help fix scanner issues
+        int numCorrect = 0; //Determines the number of correct answers
+        ArrayList<String> studentNames = new ArrayList<>(); //Stores the student names
+        File courseFile;    //Holds the course file
+        File studentFile = new File("StudentAccount.txt");  //File for the student file
         try {
-            BufferedReader bfr = new BufferedReader(new FileReader(studentFile));
-            String line = bfr.readLine();
+            BufferedReader bfr = new BufferedReader(new FileReader(studentFile));   //Buffered reader for student file
+            String line = bfr.readLine();   //Reads the next line
             while (line != null) {
                 studentNames.add(line);
                 line = bfr.readLine();
@@ -649,7 +652,7 @@ public class Teacher {
                 System.out.println("That course does not exist");
             }
         } while (!courseFile.exists());
-        File quizFile;
+        File quizFile;  //The file for the quiz
         do {
             System.out.println("Enter the name of the quiz or press N to exit");
             temp = scan.next();
@@ -663,18 +666,21 @@ public class Teacher {
             }
         } while (!quizFile.exists());
         File studentQuiz = new File(student + "_" + name + "_" + courseName + "_" + quizName + ".txt");
+        //The file for the student's quiz
         if (!studentQuiz.exists()) {
             System.out.println("This quiz does not exist");
         } else {
             try {
-                BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));
-                BufferedReader bfrAnswers = new BufferedReader(new FileReader(studentQuiz));
-                ArrayList<String> entireFile = new ArrayList<>();
-                ArrayList<String> correct = new ArrayList<>();
-                String questionLine = bfrQuestions.readLine();
+                BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for 
+                //the student quiz and reading the questions
+                BufferedReader bfrAnswers = new BufferedReader(new FileReader(studentQuiz));    //Buffered reader for
+                //the student quiz and reading the answer
+                ArrayList<String> entireFile = new ArrayList<>();   //List to hold the files entire contents
+                ArrayList<String> correct = new ArrayList<>();  //List to hold the teachers yes or no answers
+                String questionLine = bfrQuestions.readLine();  //Reads the next line in the question buffered reader
                 if (questionLine.equals("true") || questionLine.equals("false")) {
                     questionLine = bfrQuestions.readLine();
-                    String answerLine = bfrAnswers.readLine();
+                    String answerLine = bfrAnswers.readLine();  //Reads the next line in the answer buffered reader
                     while (!answerLine.equals("A") && !answerLine.equals("B") && !answerLine.equals("C") && !answerLine.equals("D")) {
                         answerLine = bfrAnswers.readLine();
                     }
@@ -690,7 +696,7 @@ public class Teacher {
                         System.out.println(questionLine);
                         System.out.println("Student Answer: " + answerLine);
                         answerLine = bfrAnswers.readLine();
-                        String yesNo = null;
+                        String yesNo = null;    //Determines if the teacher entered yes or no
                         do {
                             System.out.println("Is this correct? Y/N");
                             temp = scan.next();
@@ -705,16 +711,18 @@ public class Teacher {
                         questionLine = bfrQuestions.readLine();
                     }
 
-                    BufferedReader bfr3 = new BufferedReader(new FileReader(studentQuiz));
-                    String line = bfr3.readLine();
+                    BufferedReader bfr3 = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for the 
+                    //student quiz
+                    String line = bfr3.readLine();  //Reads the next line in the buffered reader
                     line = bfr3.readLine();
                     while (line != null) {
                         entireFile.add(line);
                         line = bfr3.readLine();
                     }
-                    double percentage = (double) numCorrect / correct.size() * 100;
-                    PrintWriter pw = new PrintWriter(new FileOutputStream(studentQuiz));
-                    int j = 0;
+                    double percentage = (double) numCorrect / correct.size() * 100;     //Holds the grade percentage
+                    PrintWriter pw = new PrintWriter(new FileOutputStream(studentQuiz));    //Print writer for the 
+                    //student quiz
+                    int j = 0;  //Counter for the answers
                     for (int i = 0; i < entireFile.size(); i++) {
 
                         if (entireFile.get(i).equals("A") || entireFile.get(i).equals("B") ||
@@ -755,8 +763,11 @@ public class Teacher {
         teacher.teacherInterface();
     }
 
+    /**
+     * The interface the teacher sees when they login. They have 8 choices to choose from.
+     */
     public void teacherInterface() {
-        int choice = 0;
+        int choice = 0; //The teachers input 
         while (choice != 8) {
 
             do {
@@ -766,8 +777,8 @@ public class Teacher {
                 System.out.println("4. Grade Quiz\n5. View Student Submission\n6. Create Course\n7. Delete Course");
                 System.out.println("8. Exit");
                 try {
-                    String temp = scan.next();
-                    String stringChoice = temp + scan.nextLine();
+                    String temp = scan.next();  //Helps fix scanner issues  
+                    String stringChoice = temp + scan.nextLine();   //Determines what the teacher wants to do
                     choice = Integer.parseInt(stringChoice);
                 } catch (NumberFormatException e) {
                     choice = 0;
