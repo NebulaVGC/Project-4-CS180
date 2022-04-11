@@ -182,7 +182,7 @@ public class Run {
                                 break;
                             } else {
                                 System.out.println(LoginPassword);
-                                String Password = scanner.nextLine();
+                                String teacherPassword = scanner.nextLine();
                                 File f2 = new File("TeacherPassword.txt");
                                 FileReader fr2 = new FileReader(f2);
                                 BufferedReader bfr2 = new BufferedReader(fr2);
@@ -193,7 +193,7 @@ public class Run {
                                     line2 = bfr2.readLine();
                                 }
                                 bfr2.close();
-                                if (passwordList.get(accountList.indexOf(Username)).equals(Password)) {
+                                if (passwordList.get(accountList.indexOf(Username)).equals(teacherPassword)) {
                                     //run teacher
                                     try {
                                         System.out.println(editAccount);
@@ -223,9 +223,9 @@ public class Run {
                                                 System.out.println(MakePassword);
                                                 password = scanner.nextLine();
                                             }
-                                            passwordList.set(passwordList.indexOf(Password), password);
-                                            File teacherPassword = new File("TeacherPassword.txt");
-                                            FileOutputStream fos2 = new FileOutputStream(teacherPassword, false);
+                                            passwordList.set(passwordList.indexOf(teacherPassword), password);
+                                            File teacherPasswordFile = new File("TeacherPassword.txt");
+                                            FileOutputStream fos2 = new FileOutputStream(teacherPasswordFile, false);
                                             PrintWriter pw2 = new PrintWriter(fos2);
 
                                             for (int i = 0; i < accountList.size(); i++) {
@@ -391,7 +391,7 @@ public class Run {
                                 break;
                             } else {
                                 System.out.println(LoginPassword);
-                                String Password = scanner.nextLine();
+                                String password = scanner.nextLine();
                                 File f2 = new File("StudentPassword.txt");
                                 FileReader fr2 = new FileReader(f2);
                                 BufferedReader bfr2 = new BufferedReader(fr2);
@@ -402,7 +402,7 @@ public class Run {
                                     line2 = bfr2.readLine();
                                 }
                                 bfr2.close();
-                                if (passwordList.get(accountList.indexOf(Username)).equals(Password)) {
+                                if (passwordList.get(accountList.indexOf(Username)).equals(password)) {
                                     try {
                                         System.out.println(editAccount);
                                         int edit = Integer.parseInt(scanner.nextLine());
@@ -425,13 +425,13 @@ public class Run {
                                             pw2.close();
                                         } else if (edit == 2) {
                                             System.out.println(MakePassword);
-                                            String password = scanner.nextLine();
-                                            while (password.contains(" ")) {
+                                            String newpassword = scanner.nextLine();
+                                            while (newpassword.contains(" ")) {
                                                 System.out.println(PasswordError);
                                                 System.out.println(MakePassword);
-                                                password = scanner.nextLine();
+                                                newpassword = scanner.nextLine();
                                             }
-                                            passwordList.set(passwordList.indexOf(Password), password);
+                                            passwordList.set(passwordList.indexOf(password), newpassword);
                                             File studentPassword = new File("StudentPassword.txt");
                                             FileOutputStream fos2 = new FileOutputStream(studentPassword, false);
                                             PrintWriter pw2 = new PrintWriter(fos2);
