@@ -1,15 +1,22 @@
-Project 4: Learning management System (Online quiz)
+Project 4: Learning management System Option 2 (Online quiz)
+---------------------------------------------------
+
+Submitters
+---------------------------------------------------
 
 Kacey - Submitted Report
+
 Chase - Submitted Vocareum Workspace
 
 Instructions:
+--------------------------------------------------
 Compile by typing “javac MainMethod.java” into the terminal
 Run by typing “java MainMethod” into the terminal
 
-Description of classes:
+
 Teacher.java:
-	When the teacher logs in with the correct username and password, they are provided with an interface. They have 8 different options. They can create a quiz, edit a quiz, delete a quiz, grade a quiz, view a student’s submission, create a new course, delete a course, and an exit option. If the teacher enters anything besides 1-8, they are prompted to enter a new number. 
+---------------------------
+When the teacher logs in with the correct username and password, they are provided with an interface. They have 8 different options. They can create a quiz, edit a quiz, delete a quiz, grade a quiz, view a student’s submission, create a new course, delete a course, and an exit option. If the teacher enters anything besides 1-8, they are prompted to enter a new number. 
 	
 Almost every time the teacher is asked for input, input validation will occur. Meaning that if the teacher enters anything that doesn’t fit the options presented, they will receive an error and ask to try again. Or if the teacher enters a course, student, or quiz that does not exist, they will receive an error and ask to try again. Also, almost every prompt the teacher gets to enter something, they will also have the option to back out by pressing the letter that the prompt says. Most of the time it is N, but sometimes it is E. 
 
@@ -30,11 +37,14 @@ One last thing to note about the teacher class. A space cannot be entered as the
 
 
 
-
-Student.java
+Student.java:
+----------------------------------
 The Student class requires only the students username as a parameter so that it can later be used when writing the students file to pass back to the teacher for grading. The student class should be called after the login so that this parameter can be passed to it. The student class begins by prompting the user to input the username of their teacher. It will check if the teacher username they inputted exists by reading the TeacherAccounts.txt file to see if the username is stored there. If not it will print that the teacher does not exist. If it does exist then next the user will be prompted to choose a course out of the courses that the teacher has previously created. These courses are stored in a file named “teachersUsername_Courses.txt”. If an invalid choice is inputted it will print an error and loop back to the course selection. Once a course is selected the student will be prompted to choose a quiz that the teacher has created. These quizzes are stored in a file called “teachersUsername_courseName.txt”. Once a student selects a quiz the student class will check whether or not the student has taken the quiz before. This is done by checking for whether or not a file already exists called “studentUsername_teacherUsername_courseName_quizName.txt”. This is the file that is created when a student completes a quiz. If the quiz has already been taken then the student will be prompted between returning to the course selection or viewing the grade on their quiz. If they choose to view their quiz then if the teacher has graded the quiz it will print the percent given by the teacher and if it has not been graded it will print that the quiz has not yet been graded. If the quiz has not been taken yet then the selection quiz will be printed into the terminal for the user to see. This is done by reading the quiz file and the printing with System.out.println(readLine()). The student will then have the option to import a file with answers or to answer manually. When the quiz is finished a file will be created called “studentUsername_teacherUsername_courseName_quizName.txt” which will store a copy of the quiz taken, the students username, the students answers, and a timestamp of when they finished.
 
 
+
+
 Run.java
+-------------------------------------------
 For login, it will first print out a welcome prompt and ask if the user is a student or a teacher. If the user types in something that is not a 1 or a 2, the system will print out an error message and ask them to sign in again. After that, the system will print out a message to ask what action the user will like to proceed. Which includes making an account, editing an account, and sign in as an account. If the user decides to make an account, the system will prompt and ask them to enter their username, then the system will compare the username to the corresponding user type and see if the username already exists. If so, the system will return the user to the previous step. Or if the username contains a space, the system will deny the user from making an account. If the user decides to make an account and they pass all the requirements, the system will ask them for their password. Then the system will store the username in either teacherAccount.txt or studentAccount.txt based on their type, and the system will do the same for password. If the user already has an account and plans to edit their account, the system will first ask for their username, then compare it to the text file of their corresponding type. If the username does not exist, the system will prompt them back to the previous step. If the username exists, the system will ask for their password. Then the system will get the index of the account txt file and find the password in the password txt file using the index then compare it to the password the user typed in. If it matched, then the system will ask if the user wants to edit their username or their password, and using bufferedreader and bufferedwriter, the system will update the corresponding txt file. If the user decides to login, then similar to editing their account, the system will ask for their username, compare to the corresponding file to check if the username exist, then ask for password if the username exist, and compare the password the user typed in with what was stored before using the method mentioned above. If the password matches the username, then based on the type of the user, they’ll be able to use either functions from the teacher class or functions from the student class. 
 
