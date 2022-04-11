@@ -1,6 +1,14 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+/**
+ * Project 04 -- Student
+ * <p>
+ * This class is the student object for the quiz taking system.
+ *
+ * @author Matt Zlatinksi, Victor Dollosso L09
+ * @version April 11, 2022
+ */
 
 public class Student {
     private Scanner scan;
@@ -13,9 +21,10 @@ public class Student {
     /*
     method that runs the quiz and gives the user an option to attach a file to the quiz
      */
-    public void runQuiz(String quizName, String userName, String teacherName, String courseName, String plainQuizName) throws IOException {
+    public void runQuiz(String quizName, String username, String teacherName, String courseName, String plainQuizName)
+            throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(quizName));
-        File f = new File(userName + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
+        File f = new File(username + "_" + teacherName + "_" + courseName + "_" + plainQuizName + ".txt");
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
         String nextLine = "";
         String shuffleStatus = br.readLine(); //reads the first line, determines whether it will be shuffled
@@ -43,7 +52,8 @@ public class Student {
             number++;
         }
         br.close();
-        System.out.println("Would you like to attach a file with answers or answer in the quiz?"); //gives user the option
+        System.out.println("Would you like to attach a file with answers or answer in the quiz?");
+        //gives user the option
         System.out.println("1. attach a file\n2. answer in the quiz"); //gives student the choice to attach a file
         while (loop == 0) {
             String option = scan.nextLine();
@@ -66,8 +76,9 @@ public class Student {
             }
         }
         System.out.println("Thanks for taking the quiz!");
-        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime()); //timestamp
-        totalCopy = shuffleStatus + "\n" + copyQuiz + userName + "\n" + totalCopy + timeStamp;
+        String timeStamp = new SimpleDateFormat("MM/dd/yyyy_HH:mm:ss").format(Calendar.getInstance().getTime());
+        //timestamp
+        totalCopy = shuffleStatus + "\n" + copyQuiz + username + "\n" + totalCopy + timeStamp;
         bw.write(totalCopy); //writes to a file for the teacher to grade
         bw.close();
 
@@ -206,14 +217,16 @@ public class Student {
                     n++;
                 }
             }
-            if (!new File(teacher + "_Courses.txt").exists()) { //prints error if the teacher has not created any courses
+            if (!new File(teacher + "_Courses.txt").exists()) {
+                //prints error if the teacher has not created any courses
                 System.out.println("Your teacher has not created any courses");
                 return;
             }
             int loop = 0; //initiates looping variable
 
             do {
-                String course = student.pickCourse(teacher + "_Courses.txt"); //runs method to have student pick a course
+                String course = student.pickCourse(teacher + "_Courses.txt");
+                //runs method to have student pick a course
                 if (course.equals("end")) {  //breaks out of loops is "end" is returned for pickCourse method
                     break;
                 }
@@ -232,7 +245,8 @@ public class Student {
                         }
                     }
                 } else {
-                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt"); //runs method to have student pick a quiz
+                    String quiz = student.pickQuiz(teacher + "_" + course + ".txt");
+                    //runs method to have student pick a quiz
                     System.out.println(quiz);
                     if (quiz.equals("end")) {
                         break;
@@ -251,13 +265,17 @@ public class Student {
                             }
                         }
                     } else {
-                        BufferedReader bufferedReader2 = new BufferedReader(new FileReader(teacher + "_" + course + "_" + quiz + ".txt"));
+                        FileReader fr = new FileReader(teacher + "_" + course + "_" + quiz + ".txt");
+                        BufferedReader bufferedReader2 = new BufferedReader(fr);
                         String shuffleStatus = bufferedReader2.readLine(); //whether or not to shuffle the quiz
                         if (shuffleStatus.equalsIgnoreCase("True")) {
                             student.shuffle(teacher + "_" + course + "_" + quiz + ".txt"); //shuffles quiz
                         }
-                        if (!new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt").exists()) { //checks if quiz has already been taken. if not then runs the quiz
-                            student.runQuiz(teacher + "_" + course + "_" + quiz + ".txt", student.userName, teacher, course, quiz);
+                        if (!new File(student.userName + "_" + teacher + "_"
+                                + course + "_" + quiz + ".txt").exists()) {
+                            //checks if quiz has already been taken. if not then runs the quiz
+                            student.runQuiz(teacher + "_" + course + "_" + quiz + ".txt",
+                                    student.userName, teacher, course, quiz);
                         } else {
                             System.out.println("Quiz already taken");
                             int optionLoop = 0;
@@ -265,7 +283,8 @@ public class Student {
                                 System.out.println("1. View Quiz Grade\n2. Exit Back to Courses");
                                 String viewGrade = scan.nextLine();
                                 if (viewGrade.equals("1")) {
-                                    File f = new File(student.userName + "_" + teacher + "_" + course + "_" + quiz + ".txt");
+                                    File f = new File(student.userName + "_" + teacher +
+                                            "_" + course + "_" + quiz + ".txt");
                                     BufferedReader brquiz = new BufferedReader(new FileReader(f));
                                     String quizLine = brquiz.readLine();
                                     int cline = 0;
@@ -273,7 +292,8 @@ public class Student {
                                         cline++;
                                         quizLine = brquiz.readLine(); //reads through all line
                                     }
-                                    BufferedReader brquiz2 = new BufferedReader(new FileReader(f)); //reads the same quiz with new bfr
+                                    BufferedReader brquiz2 = new BufferedReader(new FileReader(f));
+                                    //reads the same quiz with new bfr
                                     BufferedReader gradeSetter = new BufferedReader(new FileReader(f));
                                     String lastLine = "";
                                     String grade = "";
@@ -282,7 +302,9 @@ public class Student {
                                     }
                                     brquiz.close();
                                     String nextLine1 = "";
-                                    while (!(nextLine1 = gradeSetter.readLine()).equals(userName)) {
+                                    nextLine1 = gradeSetter.readLine();
+                                    while (!(nextLine1).equals(userName)) {
+                                        nextLine1 = gradeSetter.readLine();
                                     }
 
 
@@ -313,7 +335,8 @@ public class Student {
 
     }
 
-    public void shuffle(String filename) throws IOException {   //Shuffles the question order and the answer order of the quiz file
+    public void shuffle(String filename) throws IOException {
+        //Shuffles the question order and the answer order of the quiz file
         ArrayList<String> questions = new ArrayList<>();   //array that stores full questions with answers attached
         File f = new File(filename);
         BufferedReader br = new BufferedReader(new FileReader(f));
@@ -329,10 +352,10 @@ public class Student {
         int lineNum = 1;
         int mult = 0;
         br.readLine();
-        while(line != null){
+        while (line != null) {
             line = br.readLine();
             ++lineNum;
-            if(lineNum == ( 2 + 5 * mult) && mult <= numq && line != null){
+            if (lineNum == ( 2 + 5 * mult) && mult <= numq && line != null) {
                 mult++;
                 String q = "";
                 String ans = "";
@@ -393,7 +416,8 @@ public class Student {
             String total = q + answerI;
             newQuestions.add(total);  //string of answer options
         }
-        BufferedWriter bw = new BufferedWriter(new FileWriter(filename)); //new buffered writer to write back to quiz file
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        //new buffered writer to write back to quiz file
         bw.write(shuffleStatus); //writes "True" at top of file
         bw.write("\n");
         for (int k = 0; k < newQuestions.size(); k++) { //writes full shuffled quiz back to file
