@@ -370,7 +370,7 @@ public class RunLocalTest {
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
@@ -435,6 +435,7 @@ public class RunLocalTest {
         }
 
         @Test (timeout = 1000)
+
         public void FTestStudentEditAccountName() {
 
             String input = "2\r\n1\r\nCharlie\r\n3\r\nSky\r\n3\r\nCharlie\r\n123456\r\n3\r\nCharlie\r\n234567\r\n1\r\nCharlie1\r\n";
@@ -464,7 +465,7 @@ public class RunLocalTest {
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
@@ -529,6 +530,7 @@ public class RunLocalTest {
         }
 
         @Test (timeout = 1000)
+
         public void GTestTeacherEditPassword() {
 
             String input = "1\r\n1\r\nCloud9\r\n2\r\nFrank1\r\n3\r\nAlyssa\r\n3\r\nFrank\r\n234567\r\n3\r\nFrank\r\n123456\r\n2\r\n234567\r\n";
@@ -558,13 +560,13 @@ public class RunLocalTest {
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
@@ -628,6 +630,7 @@ public class RunLocalTest {
         }
 
         @Test (timeout = 1000)
+
         public void HTestStudentEditPassword() {
 
             String input = "2\r\n1\r\nCharlie1\r\n2\r\nKevin1\r\n3\r\nCharlie\r\n3\r\nKevin\r\n234567\r\n3\r\nKevin\r\n123456\r\n2\r\n234567\r\n";
@@ -656,13 +659,13 @@ public class RunLocalTest {
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
                     "3. Edit existing account\n" +
                     "Please enter your username\n" +
-                    "This username does not existed!\n" +
+                    "This username does not exist!\n" +
                     "How would you like to proceed?\n" +
                     "1. Make a new account\n" +
                     "2. Login with existing account\n" +
@@ -729,7 +732,7 @@ public class RunLocalTest {
 
         @Test (timeout = 1000)
         public void ITeacherCreateCourse() {
-            String input = "1\r\n2\r\nCloud9\r\n234567\r\n8\r\n";
+            String input = "1\n2\nCloud9\n234567\n8\n";
 
             receiveInput(input);
 
@@ -760,24 +763,13 @@ public class RunLocalTest {
                     "6. Create Course\n" +
                     "7. Delete Course\n" +
                     "8. Exit\n" +
-                    "Enter the name of the new course or press N to exit\n" +
-                    "Course added successfully\n" +
-                    "What would you like to do?\n" +
-                    "1. Create Quiz\n" +
-                    "2. Edit Quiz\n" +
-                    "3. Delete Quiz\n" +
-                    "4. Grade Quiz\n" +
-                    "5. View Student Submission\n" +
-                    "6. Create Course\n" +
-                    "7. Delete Course\n" +
-                    "8. Exit\n" +
                     "Goodbye!\n";
             assertEquals("Ensure your Main.java output contains the correct information!", expectedFull, out);
         }
 
         public void JStudentLogin() {
 
-            String input = "2\r\n2\r\nKevin\r\n234567\r\nFrank\r\n";
+            String input = "2\r\n2\r\nKevin\r\n234567\r\nFrank\r\n2\r\n";
 
             receiveInput(input);
 
@@ -800,7 +792,10 @@ public class RunLocalTest {
                     "Please enter your username\n" +
                     "Please enter your password\n" +
                     "What is the username of your teacher?\n" +
-                    "Your teacher has not created any courses\n";
+                    "Course Options:\n" +
+                    "1. Math\n" +
+                    "2. Exit\n" +
+                    "Please select which course you would like to take?\n";
 
             assertEquals("Ensure your Main.java output contains the correct information!", expectedFull, out);
         }
