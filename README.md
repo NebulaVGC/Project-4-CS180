@@ -10,8 +10,8 @@ Chase - Submitted Vocareum Workspace
 
 Instructions:
 --------------------------------------------------
-Compile by typing “javac MainMethod.java” into the terminal
-Run by typing “java MainMethod” into the terminal
+
+Run "MainMethod"
 
 
 Teacher.java:
