@@ -1,6 +1,14 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+/**
+ * Project 04 -- Student
+ * <p>
+ * This class is the student object for the quiz taking system.
+ *
+ * @author Matt Zlatinksi, Victor Dollosso L09
+ * @version April 11, 2022
+ */
 
 public class Student {
     Scanner scan = new Scanner(System.in);
