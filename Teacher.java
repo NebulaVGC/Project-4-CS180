@@ -74,7 +74,7 @@ public class Teacher {
             if (courseName.equals("N")) {
                 return;
             } else if (!f1.exists()) {
-                System.out.println("That course does not exist");
+                System.out.print("That course does not exist. ");
             }
 
         } while (!f1.exists());
@@ -138,7 +138,7 @@ public class Teacher {
         File courseFile;    //Used to determine if the course file exists
         String temp;    //Used to help fix scanner issues
         do {
-            System.out.println("Please enter the course name or press N to exit");
+            System.out.println("Enter the course name or press N to exit");
             temp = scan.next();
             courseName = temp + scan.nextLine();
             if (courseName.equals("N")) {
@@ -149,10 +149,10 @@ public class Teacher {
                 contains = 1;
             }
             if (contains == 0) {
-                System.out.println("This course does not exist.");
+                System.out.print("This course does not exist. ");
             }
         } while (contains == 0);
-        System.out.println("Please enter the name of the quiz or press N to exit");
+        System.out.println("Enter the name of the quiz or press N to exit");
         temp = scan.next();
         quizName = temp + scan.nextLine();
         if (quizName.equals("N")) {
@@ -191,7 +191,7 @@ public class Teacher {
             File f = new File(filePath);    //The file for the filepath the teacher answered
             if (!f.exists()) {
                 do {
-                    System.out.println("That file does not exist. Please enter a new file or press N to exit");
+                    System.out.println("That file does not exist. Enter a new file or press N to exit");
                     temp = scan.next();
                     filePath = temp + scan.nextLine();
                     f = new File(filePath);
@@ -199,6 +199,7 @@ public class Teacher {
                         return;
                     }
                 } while (!f.exists());
+
             }
             try {
                 ArrayList<String> importList = new ArrayList<>();   //List to hold the lines within the import file
@@ -226,7 +227,7 @@ public class Teacher {
         } else {
             String stringRandom;    //Determines if the teacher wants the quiz randomized or not
             do {
-                System.out.println("Do you want the quiz to be randomized? Press E to exit. Y/N");
+                System.out.println("Do you want the quiz to be randomized? Y/N. Press E to exit.");
                 temp = scan.next();
                 stringRandom = temp + scan.nextLine();
 
@@ -235,7 +236,7 @@ public class Teacher {
                 } else if (stringRandom.equals("Y")) {
                     randomized = true;
                 } else if (stringRandom.equals("N")) {
-
+                    randomized = false;
                 } else {
                     System.out.println("Not an option");
                     stringRandom = null;
@@ -343,7 +344,7 @@ public class Teacher {
             }
 
             if (!courseFile.exists()) {
-                System.out.println("That course does not exist.");
+                System.out.print("That course does not exist. ");
             }
         } while (!courseFile.exists());
         System.out.println("Enter the name of the quiz you want to edit or press N to exit.");
@@ -354,14 +355,15 @@ public class Teacher {
         }
         do {
             f2 = new File(name + "_" + courseName + "_" + quizName + ".txt");
-            if (!f2.exists()) {
+            if (quizName.equals("N")) {
+                return;
+            }
+            else if (!f2.exists()) {
                 System.out.println("That quiz does not exist. Enter another quiz or press N to exit");
                 temp = scan.next();
                 quizName = temp + scan.nextLine();
                 f2 = new File(name + "_" + courseName + "_" + quizName);
-                if (quizName.equals("E")) {
-                    return;
-                }
+
             }
 
         } while (!f2.exists());
@@ -498,18 +500,21 @@ public class Teacher {
             }
         } while (!courseFile.exists());
         File file;  //File for the quiz
+        File file2; //File for the answer sheet
         do {
             System.out.println("Enter the name of the quiz you want to delete or press N to exit");
             String temp = scan.next();      //Helps fix scanner errors
             String quizName = temp + scan.nextLine();   //The quiz name the teacher entered
             file = new File(name + "_" + courseName + "_" + quizName + ".txt");
+            file2 = new File(name + "_" + courseName + "_" + quizName + "_correctAnswers.txt");
             if (quizName.equals("N")) {
                 return;
             } else if (!file.exists()) {
-                System.out.println("That file does not exist");
+                System.out.print("That file does not exist. ");
             }
         } while (!file.exists());
         file.delete();
+        file2.delete();
         System.out.println("File deleted successfully");
     }
 
@@ -543,19 +548,19 @@ public class Teacher {
             if (student.equals("N")) {
                 return;
             } else if (studentNames.indexOf(student) < 0) {
-                System.out.println("That student does not exist");
+                System.out.print("That student does not exist. ");
             }
         } while (studentNames.indexOf(student) < 0);
 
         do {
-            System.out.println("Enter the quiz course or press N to exit");
+            System.out.println("Enter the course or press N to exit");
             temp = scan.next();
             courseName = temp + scan.nextLine();
             courseFile = new File(name + "_" + courseName + ".txt");
             if (courseName.equals("N")) {
                 return;
             } else if (!courseFile.exists()) {
-                System.out.println("That course does not exist");
+                System.out.print("That course does not exist. ");
             }
         } while (!courseFile.exists());
         File quizFile;  //File for the quiz
@@ -568,7 +573,7 @@ public class Teacher {
             }
             quizFile = new File(student + "_" + name + "_" + courseName + "_" + quizName + ".txt");
             if (!quizFile.exists()) {
-                System.out.println("This quiz does not exist");
+                System.out.print("This quiz does not exist. ");
             }
         } while (!quizFile.exists());
 
@@ -642,7 +647,8 @@ public class Teacher {
                 line = bfr.readLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("No student has been added");
+            return;
         }
         do {
             System.out.println("Enter the name of the student you would like to view or press N to exit");
@@ -651,7 +657,7 @@ public class Teacher {
             if (student.equals("N")) {
                 return;
             } else if (studentNames.indexOf(student) < 0) {
-                System.out.println("That student does not exist");
+                System.out.print("That student does not exist. ");
             }
         } while (studentNames.indexOf(student) < 0);
         do {
@@ -663,7 +669,7 @@ public class Teacher {
             }
             courseFile = new File(name + "_" + courseName + ".txt");
             if (!courseFile.exists()) {
-                System.out.println("That course does not exist");
+                System.out.print("That course does not exist. ");
             }
         } while (!courseFile.exists());
         File quizFile;  //The file for the quiz
@@ -676,13 +682,14 @@ public class Teacher {
             }
             quizFile = new File(name + "_" + courseName + "_" + quizName + ".txt");
             if (!quizFile.exists()) {
-                System.out.println("That quiz does not exist");
+                System.out.print("That quiz does not exist. ");
             }
         } while (!quizFile.exists());
         File studentQuiz = new File(student + "_" + name + "_" + courseName + "_" + quizName + ".txt");
         //The file for the student's quiz
         if (!studentQuiz.exists()) {
-            System.out.println("This quiz does not exist");
+            System.out.println("This student has not taken the quiz");
+            return;
         } else {
             try {
                 BufferedReader bfrQuestions = new BufferedReader(new FileReader(studentQuiz));  //Buffered reader for
