@@ -68,8 +68,9 @@ public class Teacher {
         File f1;    //File to check if the given course exists
         do {
             System.out.println("Enter the name of the course you want to delete or press N to exit");
-            courseName = scan.next();
-            f1 = new File(name + "_" + courseName);
+            String temp = scan.next();
+            courseName = temp + scan.nextLine();
+            f1 = new File(name + "_" + courseName + ".txt");
             if (courseName.equals("N")) {
                 return;
             } else if (!f1.exists()) {
@@ -89,26 +90,37 @@ public class Teacher {
                     line = bfr.readLine();
                 }
             }
+            BufferedReader bfr2 = new BufferedReader(new FileReader(f1));
+            line = bfr2.readLine();
+            while(line != null) {
+                File quizFile = new File(name + "_" + courseName + "_" + line + ".txt");
+                quizFile.delete();
+                File answerFIle = new File(name + "_" + courseName + "_" + line + "_correctAnswers.txt");
+                answerFIle.delete();
+                line = bfr2.readLine();
+            }
+
             PrintWriter pw = new PrintWriter(new FileOutputStream(f));  //Print writer that will go over the courses
             //file and rewrite the file without the given course
             for (int i = 0; i < list.size(); i++) {
                 pw.println(list.get(i));
             }
+
             pw.close();
             bfr.close();
+            bfr2.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         File f3 = new File(name + "_" + courseName + ".txt");  //File that holds the quizzes for the course
-        if (f3.delete()) {
-            System.out.println("Course deleted successfully!");
-        } else {
-            System.out.println("Course could not be deleted");
-        }
+        f3.delete();
+        System.out.println("Course deleted successfully!");
+
+
+
 
     }
 
@@ -191,7 +203,7 @@ public class Teacher {
             try {
                 ArrayList<String> importList = new ArrayList<>();   //List to hold the lines within the import file
                 BufferedReader bfr = new BufferedReader(new FileReader(f));   //Buffered reader that reads the
-                //import file
+                                                                    //import file
                 String line = bfr.readLine();   //Reads the next line in the buffered reader
                 while (line != null) {
                     importList.add(line);
@@ -305,6 +317,7 @@ public class Teacher {
             System.out.println("The quiz is completed");
 
             pw.close();
+            pw2.close();
             pw3.close();
             pw2.close();
         }
